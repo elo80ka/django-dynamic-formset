@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Basic Formset (DIV layout){% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+    $(function() {
+        $('form div').formset()
+    })
+</script>
+<style type="text/css">
+    .add-row {
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/add.png) no-repeat left center;
+    }
+    .delete-row {
+        display:block;
+        margin:6px 0 0 0;
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="entry">
+        <form method="post" action="">
+            {% for form in formset.forms %}
+            <div id="{{ form.prefix }}-row" style="padding-bottom:6px; border-bottom:1px dotted #ccc; margin-bottom:6px;">
+                {{ form.type.label_tag }}<br />
+                {{ form.type }}
+                {{ form.value.label_tag }}<br />
+                {{ form.value }}
+            </div>
+            {% endfor %}
+            {{ formset.management_form }}
+            <p>
+                <input type="submit" value="Submit" />
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}

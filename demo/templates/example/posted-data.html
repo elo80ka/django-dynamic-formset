@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Posted Data{% endblock %}
+
+{% block content %}
+<div class="post">
+    <h1 class="title">Posted data</h1>
+    <div class="entry">
+        <p>Received data from {{ data|length }} forms.</p>
+        {% for form_data in data %}
+        <p>
+            <strong>Form #{{ forloop.counter }}</strong><br />
+            {% if form_data.product %}
+            <strong>Product:</strong> {{ form_data.product }}<br />
+            <strong>Quantity:</strong> {{ form_data.quantity }}
+            {% else %}
+            <strong>Type:</strong> {{ form_data.type }}<br />
+            <strong>Value:</strong> {{ form_data.value }}
+            {% endif %}
+        </p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

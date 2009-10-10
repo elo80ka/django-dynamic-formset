@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="post">
+    <h1 class="title">Examples</h1>
+    <div class="entry">
+        <p>
+            The examples below were mostly pulled out from working code. View the source
+            to see how they work:
+        </p>
+        <ul>
+            <li><a href="{% url example_table %}">Basic Formset (Table layout)</a></li>
+            <li><a href="{% url example_stacked %}">Basic Formset (DIV layout)</a></li>
+            <li><a href="{% url example_inline_formset %}">Inline Formset</a></li>
+            <li><a href="{% url example_inline_autocomplete %}">Inline Formset using Autocomplete</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

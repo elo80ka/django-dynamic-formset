@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+
+Name       : Unqualified
+Description: A two-column, fixed-width design.
+Version    : 1.0
+Released   : 20071220
+
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>{% block title %}Velkomm{% endblock %} :: Django Dynamic Formset Examples</title>
+<link href="{{ MEDIA_URL }}css/default.css" rel="stylesheet" type="text/css" media="screen" />
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.formset.min.js"></script>
+{% block extrahead %}{% endblock %}
+</head>
+<body>
+<!-- start header -->
+<div id="header">
+	<div id="logo">
+		<h1><a href="">Django Dynamic Formset</a></h1>
+		<p>A jQuery plugin for managing django formsets</p>
+	</div>
+	<div id="menu">
+		<ul>
+			<li><a href="/">Examples</a></li>
+			<li><a href="">Documentation</a></li>
+		</ul>
+	</div>
+</div>
+<!-- end header -->
+<!-- start page -->
+<div id="page">
+	<!-- start content -->
+	<div id="content">
+		{% block content %}
+		{% endblock %}
+	</div>
+	<!-- end content -->
+	<!-- start sidebar -->
+	<div id="sidebar">
+		{% block sidebar %}{% endblock %}
+	</div>
+	<!-- end sidebar -->
+</div>
+<!-- end page -->
+<div id="footer">
+	<p>&copy;2007 All Rights Reserved. &nbsp;&bull;&nbsp; Design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a> &nbsp;&bull;&nbsp; Icons by <a href="http://www.famfamfam.com/">FAMFAMFAM</a>.</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,342 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+body {
+	margin: 0;
+	padding: 0;
+	background:  #FFFFFF url(../images/bg01.jpg) repeat-x top left;
+	font-size: 13px;
+	color: #7F7F7F;
+}
+
+body, th, td, input, textarea, select, option {
+	font-weight: normal;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+	color: #484848;
+}
+
+h1 {
+	text-transform: lowercase;
+	letter-spacing: -1px;
+	font-size: 24px;
+}
+
+h2 {
+	text-transform: lowercase;
+	letter-spacing: -1px;
+	font-size: 24px;
+}
+
+h3 {
+	font-size: 1em;
+}
+
+p, ul, ol {
+	line-height: 200%;
+}
+p.notice {
+	line-height: normal;
+	color: #003300;
+	font-weight: bold;
+}
+
+blockquote {
+	padding-left: 1em;
+}
+
+blockquote p, blockquote ul, blockquote ol {
+	line-height: normal;
+	font-style: italic;
+}
+
+a {
+	color: #7ACE11;
+}
+
+a:hover {
+	text-decoration: none;
+	color: #7ACE11;
+}
+
+/* Comments */
+
+.comment-header {
+	padding-left: 10px;
+	padding-right: 10px;
+	background-color: #f6f6f6;
+	border-bottom: 1px solid #ddd;
+	font-style: italic;
+	line-height: 250%;
+}
+.comment-header a {
+	float: right;
+	clear: right;
+}
+
+/* Header */
+
+#header {
+	width: 890px;
+	height: 190px;
+	margin: 0px auto;
+}
+
+/* Logo */
+
+#logo {
+	float: left;
+	padding: 40px 0 0 0;
+}
+
+#logo h1 {
+	margin: 0;
+	text-transform: lowercase;
+	letter-spacing: -2px;
+	font-size: 3.6em;
+	font-weight: normal;
+	color: #FFFFFF;
+}
+
+#logo h1 a {
+	padding-right: 20px;
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+#logo p {
+	margin: -5px 0 0 0;
+	text-transform: uppercase;
+	font-size: 1.22em;
+	letter-spacing: -1px;
+}
+
+#logo a {
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+/* Menu */
+
+#menu {
+	float: right;
+}
+
+#menu ul {
+	margin: 0px;
+	padding: 93px 0px 0px 0px;
+	list-style: none;
+}
+
+#menu li {
+	display: inline;
+}
+
+#menu a {
+	display: block;
+	float: left;
+	margin-left: 20px;
+	text-decoration: none;
+	text-transform: lowercase;
+	font-size: 1.6em;
+	color: #FFFFFF;
+}
+
+#menu a:hover, .active a {
+	border-bottom: 3px solid #FFFFFF;
+}
+
+
+/* Page */
+
+#page {
+	width: 890px;
+	margin: 0 auto;
+}
+
+/* Content */
+
+#content {
+	float: left;
+	width: 590px;
+}
+
+.post {
+	padding: 20px 20px;
+	background: url(../images/bg04.jpg) no-repeat top left;
+}
+
+.title {
+	margin: 0;
+	border-bottom: 1px solid #484848;
+	color: #484848;
+}
+
+.byline {
+	margin: 0;
+	color: #D79B00;
+}
+
+.meta {
+	text-align: left;
+	color: #646464;
+}
+
+.meta .edit {
+	padding-left: 20px;
+	background: url(../images/edit.png) no-repeat left center;
+}
+
+.meta .more {
+	padding-left: 20px;
+	background: url(../images/doc.png) no-repeat left center;
+}
+
+.meta .comments {
+	padding-left: 20px;
+	background: url(../images/comments.png) no-repeat left center;
+}
+
+strong {
+	font-weight: bolder;
+}
+
+/* Sidebar */
+
+#sidebar {
+	float: right;
+	width: 240px;
+}
+
+#sidebar ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#sidebar li {
+}
+
+#sidebar li ul {
+	padding: 15px 0;
+}
+
+#sidebar li li {
+	padding-left: 20px;
+	border-bottom: 1px dotted #7B9418;
+}
+
+#sidebar h2 {
+	margin: 0;
+	padding: 5px 0 0 20px;
+	background: url(../images/img06.jpg) no-repeat left 80%;
+}
+#sidebar h2.user {
+	margin-bottom: 20px;
+	font-size: 20px;
+	text-transform: none;
+}
+
+#sidebar a {
+	text-decoration: none;
+}
+
+#sidebar a:hover {
+}
+
+a.download {
+	display: block;
+	padding-left: 85px;
+	background: url(../images/download.png) 0 50% no-repeat;
+	line-height: 80px;
+	font-size: 22px;
+	text-decoration: none;
+}
+
+/* Footer */
+
+#footer {
+	clear: both;
+	margin: 0px;
+	height: 80px;
+	background: #F2F2F2 url(../images/bg02.jpg) repeat-x left top;
+}
+
+#footer p {
+	padding: 20px 0;
+	text-align: center;
+	font-size: smaller;
+	color: #717171;
+}
+
+/* Forms */
+
+form {
+	margin-left: auto;
+	margin-right: auto;
+	width: 90%;
+}
+form input[type="text"],
+form input[type="password"] {
+	width: 200px;
+}
+form textarea {
+	display: block;
+	width: 100%;
+	height: 160px;
+}
+form select {
+	display: block;
+}
+form ul {
+	list-style: none;
+	margin-top: 0;
+	margin-left: 0;
+}
+
+/* Calendar */
+
+.calendar {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 20px;
+	width: 235px;
+}
+.calendar table caption {
+	font-size: 22px;
+	text-transform: lowercase;
+	color: #484848;
+}
+.calendar table {
+	margin-bottom: 0;
+	width: 235px;
+}
+.calendar th, .calendar td {
+	text-align: center;
+}
+.calendar th {
+	color: #484848;
+}
+.calendar td.wkend {
+	color: #D79B00;
+}
+.calendar td a {
+	display: block;
+	background-color: #484848;
+	color: #fff;
+}
+.calendar td a:hover {
+	background-color: #7ACE11;
+}
+.previous-month {
+	float: left;
+}
+.next-month {
+	float: right;
+}

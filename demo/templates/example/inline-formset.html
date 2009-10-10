@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Inline Formset{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+    $(function() {
+        $('#id_orders_table tbody tr').formset({
+            // For inline formsets, be sure to set the prefix, as the default prefix
+            // ('form') isn't correct.
+            // Django appears to generate the prefix from the lowercase plural
+            // name of the related model, with camel-case converted to underscores.
+            prefix: 'ordered_items'
+        })
+    })
+</script>
+<style type="text/css">
+    .delete-row {
+        margin-left:5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="entry">
+        <form method="post" action="">
+            {{ form.as_p }}
+            <h2>Order details</h2>
+            <table id="id_orders_table" border="0" cellpadding="0" cellspacing="5">
+                <thead>
+                    <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in formset.forms %}
+                    <tr id="{{ form.prefix }}-row">
+                        <td>
+                            {{ form.order.as_hidden }}
+                            {{ form.product }}
+                        </td>
+                        <td>{{ form.quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {{ formset.management_form }}
+            <p>
+                <input type="submit" value="Submit" />
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
