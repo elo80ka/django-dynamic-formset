@@ -1,0 +1,132 @@
+=====================================
+Django Dynamic Formsets documentation
+=====================================
+
+The 5-minute introduction
+=========================
+
+If you have an existing project, it's pretty easy to add
+client-side support for adding and removing forms.
+
+I'll assume you've already created your formsets. You can create
+formsets using any of the provided methods: both regular formsets
+(created with the ``formset_factory``) and inline formsets
+(created with the ``inlineformset_factory``) are supported.
+
+1. First, copy ``jquery.formset.js`` to your ``MEDIA_ROOT``;
+   don't forget to include the jQuery library too!
+
+2. Include a reference to the script in your template; again, don't
+   forget to reference the jQuery library (before the script).
+
+3. Render the formset as you would normally -- I usually use a table
+   but you can use DIVs, Ps or whatever you desire. Let's use the
+   example markup below::
+
+       <form id="myForm" method="post" action="">
+           <table border="0" cellpadding="0" cellspacing="0">
+               <tbody>
+                   {% for form in formset.forms %}
+                   <tr>
+                      <td>{{ form.field1 }}</td>
+                      <td>{{ form.field2 }}</td>
+                      <td>{{ form.field3 }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+           {{ formset.management_form }}
+       </form>
+
+4. Add the following script to your template (before the closing
+   ``BODY`` tag, or in your ``HEAD``, below the reference to
+   ``jquery.formset.js``)::
+
+       <script type="text/javascript">
+           $(function() {
+               $('#myForm tbody tr').formset();
+           })
+       </script>
+
+   Notice that our jQuery selector targets the container for each
+   form. We could have assigned a class to each ``TR`` and used that
+   instead::
+
+       $('.form-container').formset();
+
+   Either way is fine, really :)
+
+   If you used a non-inline formset, you're done. Fini. Save your
+   template and navigate to the appropriate view in your application,
+   and you should see an "add another" link. Clicking on it should add
+   another instance of your form to the page. You can remove instances
+   by clicking the "remove" link; if there's only one form in the
+   formset, the remove link isn't shown.
+
+5. If you're using an inline formset, you'll need to set the prefix
+   option in the call to ``formset``. Replace the code in (4) with the
+   following::
+
+       <script type="text/javascript">
+           $(function() {
+               $('#myForm tbody tr').formset({
+                   prefix: '{{ formset.prefix }}'
+               });
+           })
+       </script>
+
+   Save your template and hit refresh in your browser, and you should
+   be good to go.
+
+
+Formset options
+===============
+
+You can customize this plugin's behavior by passing an options hash. A
+list of available options is shown below::
+
+    ``prefix``
+        Use this to specify the prefix for your formset if it's anything
+        other than the default ("form"). This option must be supplied for
+        inline formsets.
+
+    ``addText``
+        Use this to set the text for the generated add link. The default
+        text is "add another".
+
+    ``deleteText``
+        Use this to set the text for the generated delete links. The
+        default text is "remove".
+
+    ``addCssClass``
+        Use this to change the default CSS class applied to the generated
+        add link (possibly, to avoid CSS conflicts within your templates).
+        The default class is "add-row".
+
+    ``deleteCssClass``
+        Use this to change the default CSS class applied to the generated
+        delete links. The default class is "delete-row".
+
+    ``added``
+        If you set this to a function, that function will be called each
+        time a new form is added. The function should take a single argument,
+        ``row``; it will be passed a jQuery object, wrapping the form that
+        was just added.
+
+    ``removed``
+        Set this to a function, and that function will be called each time
+        a form is deleted. The function should take a single argument,
+        ``row``; it will be passed a jQuery object, wrapping the form that
+        was just removed.
+
+.. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
+   Internally, the plugin uses the class names to target the add and delete
+   links. Any other elements with the same class applied to them will also
+   have the add and delete behavior, which is almost certainly not what you
+   want.
+
+Provided CSS classes
+====================
+
+Each form's container will have the class ``dynamic-form`` applied to it.
+You can use this to define rules targeting dynamic forms.
