@@ -71,7 +71,14 @@
                 $(row).removeAttr('id').insertAfter($('.dynamic-form:last'));
                 $(row).find('input,select,textarea,label').each(function() {
                     updateElementIndex(this, options.prefix, nextIndex);
-                    $(this).val('');
+                    // If this is a checkbox or radiobutton, set uncheck it.
+                    // Fix for Issue 1, reported by Wilson.Andrew.J:
+                    var $$ = $(this);
+                    if ($$.is('input:checkbox') || $$.is('input:radio')) {
+                        $$.attr('checked', false);
+                    } else {
+                        $$.val('');
+                    }
                 });
                 var formCount = nextIndex + 1;
                 $('#id_' + options.prefix + '-TOTAL_FORMS').val(formCount);

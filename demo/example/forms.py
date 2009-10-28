@@ -44,5 +44,6 @@ CONTACT_INFO_TYPES = (
 class ContactInfoForm(forms.Form):
     type = fields.ChoiceField(choices=CONTACT_INFO_TYPES)
     value = fields.CharField(max_length=200)
+    preferred = fields.BooleanField(required=False)
 
 ContactFormset = formsets.formset_factory(ContactInfoForm)

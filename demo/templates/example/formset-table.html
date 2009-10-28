@@ -33,6 +33,7 @@
             <table id="id_contact_info_table" border="0" cellpadding="0" cellspacing="5">
                 <thead>
                     <tr>
+                        <th scope="col">Preferred</th>
                         <th scope="col">Type</th>
                         <th scope="col">Value</th>
                     </tr>
@@ -40,6 +41,7 @@
                 <tbody>
                     {% for form in formset.forms %}
                     <tr id="{{ form.prefix }}-row">
+                        <td style="text-align:center;">{{ form.preferred }}</td>
                         <td>{{ form.type }}</td>
                         <td>{{ form.value }}</td>
                     </tr>

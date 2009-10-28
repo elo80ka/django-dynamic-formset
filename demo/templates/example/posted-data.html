@@ -15,7 +15,8 @@
             <strong>Quantity:</strong> {{ form_data.quantity }}
             {% else %}
             <strong>Type:</strong> {{ form_data.type }}<br />
-            <strong>Value:</strong> {{ form_data.value }}
+            <strong>Value:</strong> {{ form_data.value }}<br />
+            <strong>Preferred:</strong> {{ form_data.preferred }}
             {% endif %}
         </p>
         {% endfor %}
