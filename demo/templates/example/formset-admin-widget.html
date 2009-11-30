@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Basic Formset with Admin Widget{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+    // Define this so we don't have to bother with the admin jsi18n stuff:
+    function gettext(msgid) { return msgid; }
+</script>
+{{ formset.media }}
+<script type="text/javascript">
+    $(function() {
+        $('.form-container').formset({
+            added: function(row) {
+                // Find the fields with the calendar widget
+                $(row).find('.vDateField').each(function(i) {
+                    // Remove the cloned spam element: it links to an incorrect calendar
+                    $(this).parent().find('span').remove();
+                    // DateTimeShortcuts is defined in DateTimeShortcuts.js in the Django admin media
+                    DateTimeShortcuts.addCalendar(this);
+                });
+            }
+        });
+    });
+</script>
+<!-- Here's an example of how you can style add/delete buttons with CSS -->
+<style type="text/css">
+    .add-row {
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/add.png) no-repeat left center;
+    }
+    .delete-row {
+        float:right;
+        display:block;
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
+    }
+    th {
+        text-align:right;
+        font-weight:bold;
+    }
+    td span img {
+        vertical-align:middle;
+        border:0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="entry">
+        <form method="post" action="">
+            {% for form in formset.forms %}
+            <table id="{{ form.prefix }}-row" class="form-container" border="0" cellpadding="0" cellspacing="5">
+                <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ form.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Start Date</th>
+                        <td>{{ form.start_date }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">End Date</th>
+                        <td>{{ form.end_date }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endfor %}
+            <p>
+                {{ formset.management_form }}
+                <input type="submit" value="Submit" />
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<p>
+    Here's another example that uses the "added" callback, based on <a href="http://elo80ka.wordpress.com/2009/10/10/jquery-plugin-django-dynamic-formset/#comment-18">a comment</a>
+    submitted by <a href="http://escolareadevelopment.blogspot.com/">lfborjas</a>.
+</p>
+<p>
+    I apologize for not styling the calendar popup properly -- didn't really have much time.
+    Sure, it'd have made the demo prettier, but I think you'll still get the idea, ugly calendar
+    or no.
+</p>
+{% endblock %}

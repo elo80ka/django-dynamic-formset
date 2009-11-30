@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Multiple formsets on the same page{% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+    // Define this so we don't have to bother with the admin jsi18n stuff:
+    function gettext(msgid) { return msgid; }
+</script>
+{{ event_formset.media }}
+<script type="text/javascript">
+    $(function() {
+        $('#id_contact_info_table tbody tr').formset({
+            formCssClass: 'dynamic-contact-form',
+            prefix: "{{ contact_formset.prefix }}"
+        });
+        $('table.form-container').formset({
+            formCssClass: 'dynamic-event-form',
+            prefix: "{{ event_formset.prefix }}",
+            added: function(row) {
+                // Find the fields with the calendar widget
+                $(row).find('.vDateField').each(function(i) {
+                    // Remove the cloned spam element: it links to an incorrect calendar
+                    $(this).parent().find('span').remove();
+                    // DateTimeShortcuts is defined in DateTimeShortcuts.js in the Django admin media
+                    DateTimeShortcuts.addCalendar(this);
+                });
+            }
+        });
+    });
+</script>
+<style type="text/css">
+    .add-row {
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/add.png) no-repeat left center;
+    }
+    .delete-row {
+        float:right;
+        display:block;
+        margin-left:4px;
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
+    }
+    .dynamic-event-form th {
+        text-align:right;
+        font-weight:bold;
+    }
+    .dynamic-event-form td span img {
+        vertical-align:middle;
+        border:0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="entry">
+        <form method="post" action="">
+            <h2>Contact formset</h2>
+            <table id="id_contact_info_table" border="0" cellpadding="0" cellspacing="5">
+                <thead>
+                    <tr>
+                        <th scope="col">Preferred</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in contact_formset.forms %}
+                    <tr id="{{ form.prefix }}-row" class="form-container">
+                        <td style="text-align:center;">{{ form.preferred }}</td>
+                        <td>{{ form.type }}</td>
+                        <td>{{ form.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h2>Event formset</h2>
+            {% for form in event_formset.forms %}
+            <table id="{{ form.prefix }}-row" class="form-container" border="0" cellpadding="0" cellspacing="5">
+                <tbody>
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ form.name }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Start Date</th>
+                        <td>{{ form.start_date }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">End Date</th>
+                        <td>{{ form.end_date }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% endfor %}
+            <p>
+                {{ contact_formset.management_form }}
+                {{ event_formset.management_form }}
+                <input type="submit" value="Submit" />
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<p>
+    Someone posted <a href="http://elo80ka.wordpress.com/2009/10/10/jquery-plugin-django-dynamic-formset/#comment-17">a comment</a>
+    with a workaround that enabled them use multiple formsets on the same HTML page. Personally, I've never needed this, but if you
+    find that you need to work with multiple formsets, view the source of this page to find out how.
+</p>
+<p>
+    Don't forget to check out the docs for a detailed explanation of how this works.
+</p>
+{% endblock %}

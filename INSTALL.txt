@@ -8,12 +8,12 @@ projects; the first is to do a Subversion checkout::
     svn co http://django-dynamic-formset.googlecode.com/svn/trunk/ django-dynamic-formset
 
 The second method is to download a packaged release. The latest
-release is 1.0. You can download the source and documentation only,
+release is 1.1. You can download the source and documentation only,
 or include the demo project::
 
-    wget http://django-dynamic-formset.googlecode.com/files/jquery.formset-1.0.zip
-    unzip jquery.formset-1.0.zip -d jquery.formset-1.0
-    cd jquery.formset-1.0
+    wget http://django-dynamic-formset.googlecode.com/files/jquery.formset-1.1.zip
+    unzip jquery.formset-1.1.zip -d jquery.formset-1.1
+    cd jquery.formset-1.1
 
 The plugin files are in the ``src/`` directory. If you downloaded
 the archive with the demo project, you'll need to set it up first.

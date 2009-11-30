@@ -34,7 +34,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
@@ -75,11 +75,11 @@ TEMPLATE_DIRS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-	'django.core.context_processors.auth',
-	'django.core.context_processors.media',
-	#'django.core.context_processors.i18n',
-	#'django.core.context_processors.request',
-	#'django.core.context_processors.debug',
+    'django.core.context_processors.auth',
+    'django.core.context_processors.media',
+    #'django.core.context_processors.i18n',
+    #'django.core.context_processors.request',
+    #'django.core.context_processors.debug',
 )
 
 INSTALLED_APPS = (
@@ -87,5 +87,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    #'django.contrib.admin',
     'example',
 )

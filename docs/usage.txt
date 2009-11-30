@@ -2,6 +2,8 @@
 Django Dynamic Formsets documentation
 =====================================
 
+.. _the-5-minute-intro:
+
 The 5-minute introduction
 =========================
 
@@ -13,7 +15,7 @@ formsets using any of the provided methods: both regular formsets
 (created with the ``formset_factory``) and inline formsets
 (created with the ``inlineformset_factory``) are supported.
 
-1. First, copy ``jquery.formset.js`` to your ``MEDIA_ROOT``;
+1. First, copy ``jquery.formset.min.js`` to your ``MEDIA_ROOT``;
    don't forget to include the jQuery library too!
 
 2. Include a reference to the script in your template; again, don't
@@ -79,11 +81,104 @@ formsets using any of the provided methods: both regular formsets
    be good to go.
 
 
+.. versionadded:: 1.1
+
+.. _using-multiple-formsets:
+
+Using multiple Formsets on the same page
+========================================
+
+What if you need to display more than one formset on a page? If you try
+the above code with more than one formset, you'll notice it doesn't work
+quite the way you'd expect. There are two things you need to do, in order
+to use more than one formset on a single page:
+
+1. Give each formset a unique prefix.
+
+2. Tell the plugin which forms belong to which formset. You'll do this
+   using the ``formCssClass`` option.
+
+For example, to use the plugin with ``FormSet1``, ``FormSet2`` and ``FormSet3``
+on the same page, here's what you'd do:
+
+1. In your view, when you instantiate each formset, pass a unique value for
+   the ``prefix`` keyword argument::
+
+       def my_view(request):
+           if request.method == 'POST':
+               formset1, formset2, formset3 = FormSet1(request.POST, prefix='fs1'), \
+                  FormSet2(request.POST, prefix='fs2'), FormSet3(request.POST, prefix='fs3')
+               if formset1.is_valid() and formset2.is_valid() and formset3.is_valid():
+                   # Do something cool with the forms.
+           else:
+               formset1, formset2, formset3 = FormSet1(prefix='fs1'), FormSet2(prefix='fs2') \
+                  FormSet3(prefix='fs3')
+           ...
+
+    Giving each formset a unique prefix ensures that they don't step over each
+    other. For more information on ``prefix``, see the `Django documentation
+    <http://docs.djangoproject.com/en/dev/topics/forms/formsets/#using-more-than-one-formset-in-a-view>`.
+
+2. Render the formsets in your template as you would normally::
+
+       <form id="myFormsets" method="post" action="">
+           <table id="myFormset1Table" border="0" cellpadding="0" cellspacing="0">
+               <caption>Formset One</caption>
+               <tbody>
+                   {% for form in formset1.forms %}
+                   <tr>
+                      <td>{{ form.field1 }}</td>
+                      <td>{{ form.field2 }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+           {{ formset1.management_form }}
+
+           <table id="myFormset2Table" border="0" cellpadding="0" cellspacing="0">
+               <caption>Formset Two</caption>
+               <tbody>
+                   {% for form in formset2.forms %}
+                   <tr>
+                      <td>{{ form.field1 }}</td>
+                      <td>{{ form.field2 }}</td>
+                   </tr>
+                   {% endfor %}
+               </tbody>
+           </table>
+           {{ formset2.management_form }}
+
+           ...
+
+       </form>
+
+3. Add the code to initialize the plugin for the formsets, passing a
+   unique CSS class name to ``formCssClass`` for each formset::
+
+       <script type="text/javascript">
+           $(function() {
+               $('#myFormset1Table tbody tr').formset({
+                   prefix: '{{ formset1.prefix }}',
+                   formCssClass: 'dynamic-formset1'
+               });
+               $('#myFormset2Table tbody tr').formset({
+                   prefix: '{{ formset2.prefix }}',
+                   formCssClass: 'dynamic-formset2'
+               });
+               ...
+           })
+       </script>
+
+   Save your template, hit refresh in your browser, et voila!
+
+
+.. _formset-options:
+
 Formset options
 ===============
 
 You can customize this plugin's behavior by passing an options hash. A
-list of available options is shown below::
+complete list of available options is shown below::
 
     ``prefix``
         Use this to specify the prefix for your formset if it's anything
@@ -119,14 +214,31 @@ list of available options is shown below::
         ``row``; it will be passed a jQuery object, wrapping the form that
         was just removed.
 
+.. versionadded:: 1.1
+
+    ``formCssClass``
+        Use this to set the CSS class applied to all forms within the same
+        formset. Internally, all forms with the same class are assumed to
+        belong to the same formset. If you have multiple formsets on a single
+        HTML page, you MUST provide unique class names for each formset. If
+        you don't provide a value, this defaults to "dynamic-form".
+
+        For more information, see the section on :ref:`Using multiple Formsets
+        on the same page <using-multiple-formsets>`, and check out the example
+        in the demo project.
+
 .. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
    Internally, the plugin uses the class names to target the add and delete
    links. Any other elements with the same class applied to them will also
    have the add and delete behavior, which is almost certainly not what you
    want.
 
+
+.. _provided-css-classes:
+
 Provided CSS classes
 ====================
 
-Each form's container will have the class ``dynamic-form`` applied to it.
-You can use this to define rules targeting dynamic forms.
+Each form's container will have the class specified by the ``formCssClass``
+option (defaults to "dynamic-form") applied to it. You can use this to define
+style rules targeting each of these forms.

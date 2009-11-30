@@ -6,20 +6,30 @@
 <div class="post">
     <h1 class="title">Posted data</h1>
     <div class="entry">
+        {% if multiple_formsets %}
+        <p>Received data from {{ data|length }} formsets.</p>
+        {% for formset_data in data %}
+        <h2>Formset #{{ forloop.counter }}</h2>
+        {% for form_data in formset_data %}
+        <p>
+            <strong>Form #{{ forloop.counter }}</strong><br />
+            {% for row in form_data.items %}
+            <strong>{{ row.0 }}:</strong> {{ row.1 }}{% if not forloop.last %}<br />{% endif %}
+            {% endfor %}
+        </p>
+        {% endfor%}
+        {% endfor %}
+        {% else %}
         <p>Received data from {{ data|length }} forms.</p>
         {% for form_data in data %}
         <p>
             <strong>Form #{{ forloop.counter }}</strong><br />
-            {% if form_data.product %}
-            <strong>Product:</strong> {{ form_data.product }}<br />
-            <strong>Quantity:</strong> {{ form_data.quantity }}
-            {% else %}
-            <strong>Type:</strong> {{ form_data.type }}<br />
-            <strong>Value:</strong> {{ form_data.value }}<br />
-            <strong>Preferred:</strong> {{ form_data.preferred }}
-            {% endif %}
+            {% for row in form_data.items %}
+            <strong>{{ row.0 }}:</strong> {{ row.1 }}{% if not forloop.last %}<br />{% endif %}
+            {% endfor %}
         </p>
         {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

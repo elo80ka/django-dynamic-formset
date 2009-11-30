@@ -1,6 +1,12 @@
 from django import forms
 from django.forms import fields, models, formsets, widgets
+from django.contrib.admin.widgets import AdminDateWidget
+from django.conf import settings
 from example.models import Product, Order, OrderedItem
+
+############################
+## Inline Formset Example ##
+############################
 
 class OrderForm(models.ModelForm):
     class Meta:
@@ -32,6 +38,10 @@ class AutoCompleteOrderedItemForm(models.ModelForm):
 def get_ordereditem_formset(form, formset=models.BaseInlineFormSet, **kwargs):
     return models.inlineformset_factory(Order, OrderedItem, form, formset, **kwargs)
 
+################################
+## Plain 'ole Formset example ##
+################################
+
 CONTACT_INFO_TYPES = (
     ('Phone', 'Phone'),
     ('Fax', 'Fax'),
@@ -47,3 +57,27 @@ class ContactInfoForm(forms.Form):
     preferred = fields.BooleanField(required=False)
 
 ContactFormset = formsets.formset_factory(ContactInfoForm)
+
+###############################################
+## Plain 'ole Formset with Javascript Widget ##
+###############################################
+
+class EventForm(forms.Form):
+    name = fields.CharField(max_length=150, label='display name')
+    start_date = fields.DateField(widget=AdminDateWidget)
+    end_date = fields.DateField(widget=AdminDateWidget)
+
+    def _get_media(self):
+        # The "core.js" file is required by the Admin Date widget, yet for
+        # some reason, isn't included in the widgets media definition.
+        # We override "_get_media" because core.js needs to appear BEFORE
+        # the widget's JS files, and the default order puts the form's
+        # media AFTER that of its fields.
+        media = widgets.Media(
+            js=('%sjs/core.js' % settings.ADMIN_MEDIA_PREFIX,)
+        )
+        media += super(EventForm, self)._get_media()
+        return media
+    media = property(_get_media)
+
+EventFormset = formsets.formset_factory(EventForm, extra=2)
