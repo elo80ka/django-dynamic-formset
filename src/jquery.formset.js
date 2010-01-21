@@ -13,6 +13,7 @@
     $.fn.formset = function(opts)
     {
         var options = $.extend({}, $.fn.formset.defaults, opts);
+        var $$ = $(this);
 
         var updateElementIndex = function(el, prefix, ndx) {
             var id_regex = new RegExp('(' + prefix + '-\\d+)');
@@ -22,7 +23,7 @@
             if (el.name) el.name = el.name.replace(id_regex, replacement);
         };
 
-        $(this).each(function(i) {
+        $$.each(function(i) {
             $(this).addClass(options.formCssClass);
             if ($(this).is('TR')) {
                 // If the forms are laid out in table rows, insert
@@ -49,7 +50,7 @@
                 var forms = $('.' + options.formCssClass);
                 $('#id_' + options.prefix + '-TOTAL_FORMS').val(forms.length);
                 // If there's only one form left, disable its delete button:
-                if (forms.length == 1) { $('a.' + options.deleteCssClass).hide(); }
+                if (forms.length == 1) { $('.' + options.formCssClass + ' a.' + options.deleteCssClass).hide(); }
                 for (var i=0, formCount=forms.length; i<formCount; i++) {
                     $(forms.get(i)).find('input,select,textarea,label').each(function() {
                         updateElementIndex(this, options.prefix, i);
@@ -60,19 +61,19 @@
         });
 
         if ($(this).length) {
-            var $addBtn;
+            var addButton;
             if ($(this).attr('tagName') == 'TR') {
                 // If forms are laid out as table rows, insert the
                 // "add" button in a new table row:
                 var numCols = this.eq(0).children().length;
                 $(this).parent().append('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>');
-                $addBtn = $(this).parent().find('tr:last a');
+                addButton = $(this).parent().find('tr:last a');
             } else {
                 // Otherwise, insert it immediately after the last form:
                 $(this).filter(':last').after('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
-                $addBtn = $(this).filter(':last').next();
+                addButton = $(this).filter(':last').next();
             }
-            $addBtn.click(function() {
+            addButton.click(function() {
                 var nextIndex = parseInt($('#id_' + options.prefix + '-TOTAL_FORMS').val());
                 var row = $('.' + options.formCssClass + ':first').clone(true).get(0);
                 $(row).removeAttr('id').insertAfter($('.' + options.formCssClass + ':last'));
@@ -90,7 +91,7 @@
                 var formCount = nextIndex + 1;
                 $('#id_' + options.prefix + '-TOTAL_FORMS').val(formCount);
                 // If we've got more than one form, enable delete buttons:
-                if (formCount > 1) { $('a.' + options.deleteCssClass).show(); }
+                if (formCount > 1) { $('.' + options.formCssClass + ' a.' + options.deleteCssClass).show(); }
                 // If a post-add callback was supplied, call it with the added form:
                 if (options.added) options.added($(row));
                 return false;
@@ -98,9 +99,9 @@
         }
 
         // If the formset is initialized with a single form, hide the delete button:
-        if ($(this).length == 1) { $('a.' + options.deleteCssClass).hide(); }
+        if ($$.length == 1) { $('.' + options.formCssClass + ' a.' + options.deleteCssClass).hide(); }
 
-        return $(this);
+        return $$;
     }
 
     /* Setup plugin defaults */
