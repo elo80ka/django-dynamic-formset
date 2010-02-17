@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from example.forms import ContactFormset, EventFormset, Order, OrderForm, get_ordereditem_formset
 from example.models import Order, Product
@@ -36,6 +36,25 @@ def inline_formset(request, form_class, template):
     else:
         form = OrderForm()
         formset = OrderedItemFormset()
+    return render_to_response(template, {'form': form, 'formset': formset},
+        context_instance=RequestContext(request))
+
+def inline_formset_with_data(request, form_class, template):
+    OrderedItemFormset = get_ordereditem_formset(form_class, extra=1, can_delete=True)
+    order = Order.objects.all()[0]
+    #import pdb; pdb.set_trace()
+    if request.method == 'POST':
+        form = OrderForm(request.POST, instance=order)
+        formset = OrderedItemFormset(request.POST, instance=order)
+        if form.is_valid() and formset.is_valid():
+            #data = formset.cleaned_data
+            #return display_data(request, data)
+            form.save()
+            formset.save()
+            return redirect('example_inline_formset_with_data')
+    else:
+        form = OrderForm(instance=order)
+        formset = OrderedItemFormset(instance=order)
     return render_to_response(template, {'form': form, 'formset': formset},
         context_instance=RequestContext(request))
 

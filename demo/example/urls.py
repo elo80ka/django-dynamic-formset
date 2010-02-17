@@ -10,5 +10,7 @@ urlpatterns = patterns('example.views',
        {'form_class': OrderedItemForm, 'template': 'example/inline-formset.html'}, name='example_inline_formset'),
     url(r'^inline-formset-autocomplete/$', 'inline_formset',
        {'form_class': AutoCompleteOrderedItemForm, 'template': 'example/inline-formset-autocomplete.html'}, name='example_inline_autocomplete'),
+    url(r'^inline-formset-with-data/$', 'inline_formset_with_data',
+       {'form_class': OrderedItemForm, 'template': 'example/inline-formset.html'}, name='example_inline_formset_with_data'),
     url(r'^autocomplete-products/$', 'autocomplete_products', name='example_autocomplete_products')
 )

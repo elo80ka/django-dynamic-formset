@@ -38,7 +38,8 @@
                     {% for form in formset.forms %}
                     <tr id="{{ form.prefix }}-row">
                         <td>
-                            {{ form.order.as_hidden }}
+                            {% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
+                            {{ form.DELETE }}
                             {{ form.product }}
                         </td>
                         <td>{{ form.quantity }}</td>

@@ -75,5 +75,40 @@
         "fields": {
             "name": "Uncle Bob's Hot, Hot Sauce"
         }
+    }, 
+    {
+        "pk": 1, 
+        "model": "example.order", 
+        "fields": {
+            "customer": "Kermit the frog", 
+            "date": "2010-02-13"
+        }
+    }, 
+    {
+        "pk": 1, 
+        "model": "example.ordereditem", 
+        "fields": {
+            "product": 1, 
+            "order": 1, 
+            "quantity": 5
+        }
+    }, 
+    {
+        "pk": 2, 
+        "model": "example.ordereditem", 
+        "fields": {
+            "product": 3, 
+            "order": 1, 
+            "quantity": 1
+        }
+    }, 
+    {
+        "pk": 3, 
+        "model": "example.ordereditem", 
+        "fields": {
+            "product": 7, 
+            "order": 1, 
+            "quantity": 1
+        }
     }
 ]
