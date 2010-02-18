@@ -25,21 +25,21 @@ def formset(request, formset_class, template):
     return render_to_response(template, {'formset': formset},
         context_instance=RequestContext(request))
 
-def inline_formset(request, form_class, template):
-    OrderedItemFormset = get_ordereditem_formset(form_class, extra=1)
+def empty_formset(request, formset_class, template):
+    # Initialize form template with default data:
+    form = formset_class.form(initial={'type': 'Email', 'value': 'john.Q@public.net'})
+    #import pdb; pdb.set_trace()
     if request.method == 'POST':
-        form = OrderForm(request.POST)
-        formset = OrderedItemFormset(request.POST)
-        if form.is_valid() and formset.is_valid():
+        formset = formset_class(request.POST)
+        if formset.is_valid():
             data = formset.cleaned_data
             return display_data(request, data)
     else:
-        form = OrderForm()
-        formset = OrderedItemFormset()
+        formset = formset_class()
     return render_to_response(template, {'form': form, 'formset': formset},
         context_instance=RequestContext(request))
 
-def inline_formset_with_data(request, form_class, template):
+def inline_formset(request, form_class, template):
     OrderedItemFormset = get_ordereditem_formset(form_class, extra=1, can_delete=True)
     order = Order.objects.all()[0]
     #import pdb; pdb.set_trace()
@@ -47,11 +47,14 @@ def inline_formset_with_data(request, form_class, template):
         form = OrderForm(request.POST, instance=order)
         formset = OrderedItemFormset(request.POST, instance=order)
         if form.is_valid() and formset.is_valid():
-            #data = formset.cleaned_data
-            #return display_data(request, data)
             form.save()
             formset.save()
-            return redirect('example_inline_formset_with_data')
+            data = [{
+                'order': item.order,
+                'product': item.product,
+                'quantity': item.quantity
+            } for item in order.ordered_items.all()]
+            return display_data(request, data)
     else:
         form = OrderForm(instance=order)
         formset = OrderedItemFormset(instance=order)

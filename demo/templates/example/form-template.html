@@ -6,9 +6,9 @@
 <script type="text/javascript">
     $(function() {
         $('form div').formset({
-            extraClasses: ['row1', 'row2', 'row3']
-        })
-    })
+            formTemplate: '#id_form_template'
+        });
+    });
 </script>
 <style type="text/css">
     .add-row {
@@ -21,26 +21,26 @@
         padding-left:18px;
         background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
     }
-    .dynamic-form { padding: 5px 15px; }
-    .row1 { background-color: #f9f9f9; }
-    .row2 { background-color: #f3f3f3; }
-    .row3 { background-color: #ededed; }
+    .dynamic-form {
+        margin-bottom:6px;
+        padding-bottom:6px;
+        border-bottom:1px dotted #ccc;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div>
     <div class="entry">
+        <div id="id_form_template" style="display:none;">
+            {{ form.type.label_tag }}<br />
+            {{ form.type }}
+            {{ form.value.label_tag }}<br />
+            {{ form.value }}
+            {{ form.preferred }} {{ form.preferred.label_tag }}
+        </div>
         <form method="post" action="">
-            {% for form in formset.forms %}
-            <div id="{{ form.prefix }}-row" style="padding-bottom:6px; border-bottom:1px dotted #ccc; margin-bottom:6px;">
-                {{ form.type.label_tag }}<br />
-                {{ form.type }}
-                {{ form.value.label_tag }}<br />
-                {{ form.value }}
-                {{ form.preferred }} {{ form.preferred.label_tag }}
-            </div>
-            {% endfor %}
+            <div></div>
             <p>
                 {{ formset.management_form }}
                 <input type="submit" value="Submit" />

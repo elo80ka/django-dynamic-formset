@@ -5,7 +5,9 @@
 {% block extrahead %}
 <script type="text/javascript">
     $(function() {
-        $('#id_contact_info_table tbody tr').formset()
+        $('#id_contact_info_table tbody tr').formset({
+            extraClasses: ['row1', 'row2', 'row3']
+        })
     })
 </script>
 <!-- Here's an example of how you can style add/delete buttons with CSS -->
@@ -23,6 +25,9 @@
         width:16px;
         height:16px;
     }
+    tr.row1 td { background-color: #f9f9f9; }
+    tr.row2 td { background-color: #f3f3f3; }
+    tr.row3 td { background-color: #ededed; }
 </style>
 {% endblock %}
 

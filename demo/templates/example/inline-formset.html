@@ -39,7 +39,7 @@
                     <tr id="{{ form.prefix }}-row">
                         <td>
                             {% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
-                            {{ form.DELETE }}
+                            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
                             {{ form.product }}
                         </td>
                         <td>{{ form.quantity }}</td>
