@@ -25,10 +25,9 @@ def formset(request, formset_class, template):
     return render_to_response(template, {'formset': formset},
         context_instance=RequestContext(request))
 
-def empty_formset(request, formset_class, template):
-    # Initialize form template with default data:
+def formset_with_template(request, formset_class, template):
+    # We can initialize our form template with default data:
     form = formset_class.form(initial={'type': 'Email', 'value': 'john.Q@public.net'})
-    #import pdb; pdb.set_trace()
     if request.method == 'POST':
         formset = formset_class(request.POST)
         if formset.is_valid():
@@ -42,7 +41,6 @@ def empty_formset(request, formset_class, template):
 def inline_formset(request, form_class, template):
     OrderedItemFormset = get_ordereditem_formset(form_class, extra=1, can_delete=True)
     order = Order.objects.all()[0]
-    #import pdb; pdb.set_trace()
     if request.method == 'POST':
         form = OrderForm(request.POST, instance=order)
         formset = OrderedItemFormset(request.POST, instance=order)

@@ -57,7 +57,7 @@ class ContactInfoForm(forms.Form):
     preferred = fields.BooleanField(required=False)
 
 ContactFormset = formsets.formset_factory(ContactInfoForm)
-# Define the same formset, with no extra forms:
+# Define the same formset, with no forms (so we can demo the form template):
 EmptyContactFormset = formsets.formset_factory(ContactInfoForm, extra=0)
 
 ###############################################

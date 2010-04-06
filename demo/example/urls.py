@@ -4,7 +4,7 @@ from example.forms import AutoCompleteOrderedItemForm, OrderedItemForm, ContactF
 urlpatterns = patterns('example.views',
     url(r'^stacked/$', 'formset', {'formset_class': ContactFormset, 'template': 'example/formset-stacked.html'}, name='example_stacked'),
     url(r'^table/$', 'formset', {'formset_class': ContactFormset, 'template': 'example/formset-table.html'}, name='example_table'),
-    url(r'^form-template/$', 'empty_formset', {'formset_class': EmptyContactFormset, 'template': 'example/form-template.html'}, name='example_form_template'),
+    url(r'^form-template/$', 'formset_with_template', {'formset_class': EmptyContactFormset, 'template': 'example/form-template.html'}, name='example_form_template'),
     url(r'^admin-widget/$', 'formset', {'formset_class': EventFormset, 'template': 'example/formset-admin-widget.html'}, name='example_admin_widget'),
     url(r'^multiple-formsets/$', 'multiple_formsets', {'template': 'example/formset-multiple-formsets.html'}, name='example_multiple_formsets'),
     url(r'^inline-formset/$', 'inline_formset',
