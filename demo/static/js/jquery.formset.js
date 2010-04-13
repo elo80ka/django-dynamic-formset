@@ -9,7 +9,7 @@
  * Licensed under the New BSD License
  * See: http://www.opensource.org/licenses/bsd-license.php
  */
-(function($) {
+;(function($) {
     $.fn.formset = function(opts)
     {
         var options = $.extend({}, $.fn.formset.defaults, opts),

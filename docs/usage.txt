@@ -64,12 +64,12 @@ formsets using any of the provided methods: both regular formsets
    another instance of your form to the page. You can remove instances
    by clicking the "remove" link for an instance.
 
-.. versionadded:: 1.2
+.. versionchanged:: 1.2
 
    In previous versions, if there was only one form in the formset,
    the remove link would be hidden. With the addition of form templates,
    this behaviour has been changed -- it is now possible to remove all
-   forms in a formset.
+   forms in a formset, and have the `add` link still behave as expected.
 
 
 .. _working-with-inline-formsets:
@@ -283,12 +283,15 @@ complete list of available options is shown below::
 
 .. versionadded:: 1.2
 
+    ``formTemplate``
+        Use this to override the form that gets cloned, each time a new form
+        instance is added. If specified, this should be a jQuery selector.
+
     ``extraClasses``
-        Use this to set the CSS class applied to all forms within the same
-        formset. Internally, all forms with the same class are assumed to
-        belong to the same formset. If you have multiple formsets on a single
-        HTML page, you MUST provide unique class names for each formset. If
-        you don't provide a value, this defaults to "dynamic-form".
+        Set this to an array of CSS class names (defaults to an empty array),
+        and the classes will be applied to each form in the formset in turn.
+        This can easily be used to acheive row-striping effects, which can
+        make large formsets easier to deal with visually.
 
 .. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
    Internally, the plugin uses the class names to target the add and delete
