@@ -1,9 +1,10 @@
 from django.conf.urls.defaults import *
-from example.forms import AutoCompleteOrderedItemForm, OrderedItemForm, ContactFormset, EmptyContactFormset, EventFormset
+from example.forms import AutoCompleteOrderedItemForm, OrderedItemForm, ContactFormset, MaxFiveContactsFormset, EmptyContactFormset, EventFormset
 
 urlpatterns = patterns('example.views',
     url(r'^stacked/$', 'formset', {'formset_class': ContactFormset, 'template': 'example/formset-stacked.html'}, name='example_stacked'),
     url(r'^table/$', 'formset', {'formset_class': ContactFormset, 'template': 'example/formset-table.html'}, name='example_table'),
+    url(r'^max-forms/$', 'formset', {'formset_class': MaxFiveContactsFormset, 'template': 'example/max-forms.html'}, name='example_max_forms'),
     url(r'^form-template/$', 'formset_with_template', {'formset_class': EmptyContactFormset, 'template': 'example/form-template.html'}, name='example_form_template'),
     url(r'^admin-widget/$', 'formset', {'formset_class': EventFormset, 'template': 'example/formset-admin-widget.html'}, name='example_admin_widget'),
     url(r'^multiple-formsets/$', 'multiple_formsets', {'template': 'example/formset-multiple-formsets.html'}, name='example_multiple_formsets'),

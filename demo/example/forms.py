@@ -57,6 +57,8 @@ class ContactInfoForm(forms.Form):
     preferred = fields.BooleanField(required=False)
 
 ContactFormset = formsets.formset_factory(ContactInfoForm)
+# Define a formset, which will allow a maximum of 5 contacts, no more:
+MaxFiveContactsFormset = formsets.formset_factory(ContactInfoForm, extra=5, max_num=5)
 # Define the same formset, with no forms (so we can demo the form template):
 EmptyContactFormset = formsets.formset_factory(ContactInfoForm, extra=0)
 

@@ -11,7 +11,7 @@
             // ('form') isn't correct.
             // Django appears to generate the prefix from the lowercase plural
             // name of the related model, with camel-case converted to underscores.
-            prefix: 'ordered_items',
+            prefix: '{{ formset.prefix }}',
             added: function(row) {
                 var txt = row.find('.autocomplete-me');
                 // Event handlers are cloned with each new form, so we first unbind
@@ -47,7 +47,8 @@
                     {% for form in formset.forms %}
                     <tr id="{{ form.prefix }}-row">
                         <td>
-                            {{ form.order.as_hidden }}
+                            {% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
+                            {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
                             {{ form.product }}
                         </td>
                         <td>{{ form.quantity }}</td>

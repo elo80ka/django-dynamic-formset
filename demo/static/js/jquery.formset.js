@@ -1,3 +1,8 @@
+// ==ClosureCompiler==
+// @output_file_name jquery.formset.min.js
+// @compilation_level SIMPLE_OPTIMIZATIONS
+// ==/ClosureCompiler==
+
 /**
  * jQuery Formset 1.1
  * @author Stanislaus Madueke (stan DOT madueke AT gmail DOT com)
@@ -14,6 +19,8 @@
     {
         var options = $.extend({}, $.fn.formset.defaults, opts),
             flatExtraClasses = options.extraClasses.join(' '),
+            totalForms = $('#id_' + options.prefix + '-TOTAL_FORMS'),
+            maxForms = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
             $$ = $(this),
 
             applyExtraClasses = function(row, ndx) {
@@ -35,6 +42,11 @@
                 return row.find('input,select,textarea,label').length > 0;
             },
 
+            showAddButton = function() {
+                return maxForms.length == 0 ||   // For Django versions pre 1.2
+                    (maxForms.val() == '' || (maxForms.val() - totalForms.val() > 0))
+            },
+
             insertDeleteLink = function(row) {
                 if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
@@ -51,26 +63,35 @@
                 }
                 row.find('a.' + options.deleteCssClass).click(function() {
                     var row = $(this).parents('.' + options.formCssClass),
-                        del = row.find('input:hidden[id $= "-DELETE"]');
+                        del = row.find('input:hidden[id $= "-DELETE"]'),
+                        buttonRow = row.siblings("a." + options.addCssClass + ', .' + options.formCssClass + '-add'),
+                        forms;
                     if (del.length) {
-                        // We're dealing with an inline formset; rather than remove
-                        // this form from the DOM, we'll mark it as deleted and hide
-                        // it, then let Django handle the deleting:
+                        // We're dealing with an inline formset.
+                        // Rather than remove this form from the DOM, we'll mark it as deleted
+                        // and hide it, then let Django handle the deleting:
                         del.val('on');
                         row.hide();
+                        forms = $('.' + options.formCssClass).not(':hidden');
                     } else {
                         row.remove();
-                        // Update the TOTAL_FORMS form count.
-                        // Also update names and IDs for all remaining form controls so they remain in sequence:
-                        var forms = $('.' + options.formCssClass).not('.formset-custom-template');
-                        $('#id_' + options.prefix + '-TOTAL_FORMS').val(forms.length);
-                        for (var i=0, formCount=forms.length; i<formCount; i++) {
-                            applyExtraClasses(forms.eq(i), i);
+                        // Update the TOTAL_FORMS count:
+                        forms = $('.' + options.formCssClass).not('.formset-custom-template');
+                        totalForms.val(forms.length);
+                    }
+                    // Apply extraClasses to form rows so they're nicely alternating.
+                    // Also update names and IDs for all child controls, if this isn't a delete-able
+                    // inline formset, so they remain in sequence.
+                    for (var i=0, formCount=forms.length; i<formCount; i++) {
+                        applyExtraClasses(forms.eq(i), i);
+                        if (!del.length) {
                             forms.eq(i).find('input,select,textarea,label').each(function() {
                                 updateElementIndex($(this), options.prefix, i);
                             });
                         }
                     }
+                    // Check if we need to show the add button:
+                    if (buttonRow.is(':hidden') && showAddButton()) buttonRow.show();
                     // If a post-delete callback was provided, call it with the deleted form:
                     if (options.removed) options.removed(row);
                     return false;
@@ -84,22 +105,34 @@
                 // If you specify "can_delete = True" when creating an inline formset,
                 // Django adds a checkbox to each form in the formset.
                 // Replace the default checkbox with a hidden field:
-                del.before('<input type="hidden" name="' + del.attr('name') +'" id="' + del.attr('id') +'" />');
+                if (del.is(':checked')) {
+                    // If an inline formset containing deleted forms fails validation, make sure
+                    // we keep the forms hidden (thanks for the bug report and suggested fix Mike)
+                    del.before('<input type="hidden" name="' + del.attr('name') +'" id="' + del.attr('id') +'" value="on" />');
+                    row.hide();
+                } else {
+                    del.before('<input type="hidden" name="' + del.attr('name') +'" id="' + del.attr('id') +'" />');
+                }
+                // Hide any labels associated with the DELETE checkbox:
+                $('label[for="' + del.attr('id') + '"]').hide();
                 del.remove();
             }
             if (hasChildElements(row)) {
-                insertDeleteLink(row);
                 row.addClass(options.formCssClass);
-                applyExtraClasses(row, i);
+                if (row.is(':visible')) {
+                    insertDeleteLink(row);
+                    applyExtraClasses(row, i);
+                }
             }
         });
 
         if ($$.length) {
-            var addButton, template;
+            var hideAddButton = !showAddButton(),
+                addButton, template;
             if (options.formTemplate) {
                 // If a form template was specified, we'll clone it to generate new form instances:
                 template = (options.formTemplate instanceof $) ? options.formTemplate : $(options.formTemplate);
-                template.removeAttr('id').addClass(options.formCssClass).addClass('formset-custom-template');
+                template.removeAttr('id').addClass(options.formCssClass + ' formset-custom-template');
                 template.find('input,select,textarea,label').each(function() {
                     updateElementIndex($(this), options.prefix, 2012);
                 });
@@ -126,25 +159,30 @@
             if ($$.attr('tagName') == 'TR') {
                 // If forms are laid out as table rows, insert the
                 // "add" button in a new table row:
-                var numCols = $$.eq(0).children().length;
-                $$.parent().append('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>');
-                addButton = $$.parent().find('tr:last a');
-                addButton.parents('tr').addClass(options.formCssClass + '-add');
+                var numCols = $$.eq(0).children().length,   // This is a bit of an assumption :|
+                    buttonRow = $('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>')
+                                .addClass(options.formCssClass + '-add');
+                $$.parent().append(buttonRow);
+                if (hideAddButton) buttonRow.hide();
+                addButton = buttonRow.find('a');
             } else {
                 // Otherwise, insert it immediately after the last form:
                 $$.filter(':last').after('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
                 addButton = $$.filter(':last').next();
+                if (hideAddButton) addButton.hide();
             }
             addButton.click(function() {
-                var formCount = parseInt($('#id_' + options.prefix + '-TOTAL_FORMS').val()),
+                var formCount = parseInt(totalForms.val(), 10),
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
-                    buttonRow = $(this).parents('tr.' + options.formCssClass + '-add').get(0) || this;
+                    buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
                 applyExtraClasses(row, formCount);
-                row.insertBefore($(buttonRow)).show();
+                row.insertBefore(buttonRow).show();
                 row.find('input,select,textarea,label').each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
-                $('#id_' + options.prefix + '-TOTAL_FORMS').val(formCount + 1);
+                totalForms.val(formCount + 1);
+                // Check if we've exceeded the maximum allowed number of forms:
+                if (!showAddButton()) buttonRow.hide();
                 // If a post-add callback was supplied, call it with the added form:
                 if (options.added) options.added(row);
                 return false;
