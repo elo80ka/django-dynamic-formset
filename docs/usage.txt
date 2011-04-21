@@ -292,6 +292,11 @@ complete list of available options is shown below::
         and the classes will be applied to each form in the formset in turn.
         This can easily be used to acheive row-striping effects, which can
         make large formsets easier to deal with visually.
+        
+.. versionadded:: 1.3
+
+   ``keepFieldValues``
+        
 
 .. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
    Internally, the plugin uses the class names to target the add and delete

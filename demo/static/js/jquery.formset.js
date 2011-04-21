@@ -1,10 +1,5 @@
-// ==ClosureCompiler==
-// @output_file_name jquery.formset.min.js
-// @compilation_level SIMPLE_OPTIMIZATIONS
-// ==/ClosureCompiler==
-
 /**
- * jQuery Formset 1.1
+ * jQuery Formset 1.3-pre
  * @author Stanislaus Madueke (stan DOT madueke AT gmail DOT com)
  * @requires jQuery 1.2.6 or later
  *
@@ -31,7 +26,7 @@
             },
 
             updateElementIndex = function(elem, prefix, ndx) {
-                var idRegex = new RegExp('(' + prefix + '-\\d+-)|(^)'),
+                var idRegex = new RegExp('(' + prefix + '-\\d+-)'),
                     replacement = prefix + '-' + ndx + '-';
                 if (elem.attr("for")) elem.attr("for", elem.attr("for").replace(idRegex, replacement));
                 if (elem.attr('id')) elem.attr('id', elem.attr('id').replace(idRegex, replacement));
@@ -142,7 +137,8 @@
                 // extra (>= 1) forms (thnaks to justhamade for pointing this out):
                 template = $('.' + options.formCssClass + ':last').clone(true).removeAttr('id');
                 template.find('input:hidden[id $= "-DELETE"]').remove();
-                template.find('input,select,textarea,label').each(function() {
+                // Clear all cloned fields, except those the user wants to keep (thanks to brunogola for the suggestion):
+                template.find('input,select,textarea').not(options.keepFieldValues).each(function() {
                     var elem = $(this);
                     // If this is a checkbox or radiobutton, uncheck it.
                     // This fixes Issue 1, reported by Wilson.Andrew.J:
@@ -172,7 +168,7 @@
                 if (hideAddButton) addButton.hide();
             }
             addButton.click(function() {
-                var formCount = parseInt(totalForms.val(), 10),
+                var formCount = parseInt(totalForms.val()),
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
                 applyExtraClasses(row, formCount);
@@ -202,6 +198,7 @@
         deleteCssClass: 'delete-row',    // CSS class applied to the delete link
         formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
+        keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
         added: null,                     // Function called each time a new form is added
         removed: null                    // Function called each time a form is deleted
     };
