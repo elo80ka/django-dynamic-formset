@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Inline Formset{% endblock %}
+{% block title %}Inline Formset using Autocomplete{% endblock %}
 
 {% block extrahead %}
+{{ formset.media }}
 <script type="text/javascript">
     $(function() {
         $('#id_orders_table tbody tr').formset({
@@ -10,8 +11,8 @@
             // ('form') isn't correct.
             // Django appears to generate the prefix from the lowercase plural
             // name of the related model, with camel-case converted to underscores.
-            prefix: 'ordered_items'
-        })
+            prefix: '{{ formset.prefix }}'
+        });
     })
 </script>
 <style type="text/css">
@@ -24,23 +25,6 @@
 {% block content %}
 <div>
     <div class="entry">
-        {% comment %}
-        <!-- You can use a form template with a formset containing data. -->
-        <!--table style="display:none">
-            <tbody>
-                {% with formset.empty_form as form %}
-                <tr id="id_empty_form">
-                    <td>
-                        {% for fld in form.hidden_fields %}{{ fld }}{% endfor %}
-                        {% if form.instance.pk %}{{ form.DELETE }}{% endif %}
-                        {{ form.product }}
-                    </td>
-                    <td>{{ form.quantity }}</td>
-                </tr>
-                {% endwith %}
-            </tbody>
-        </table-->
-        {% endcomment %}
         <form method="post" action="">
             {{ form.as_p }}
             <h2>Order details</h2>
@@ -71,4 +55,7 @@
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block sidebar %}
 {% endblock %}

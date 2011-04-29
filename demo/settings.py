@@ -89,4 +89,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     #'django.contrib.admin',
     'example',
+    'ajax_select',
 )
+
+AJAX_LOOKUP_CHANNELS = {
+    'product': {
+        'model': 'example.product',
+        'search_field': 'name',
+    }
+}

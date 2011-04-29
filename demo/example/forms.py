@@ -85,3 +85,25 @@ class EventForm(forms.Form):
     media = property(_get_media)
 
 EventFormset = formsets.formset_factory(EventForm, extra=2)
+
+##############################
+## Using Django-ajax-select ##
+##############################
+
+from ajax_select.fields import AutoCompleteSelectField
+
+class AutoCompleteSelectFieldForm(models.ModelForm):
+    """
+    Use the `AutoCompleteSelectField` to replace the default select field.
+    """
+    
+    product = AutoCompleteSelectField('product')
+    
+    class Meta:
+        model = OrderedItem
+
+    class Media:
+        js = ('js/jquery.autocomplete.min.js',)
+        css = {
+            'all': ('css/jquery.autocomplete.css',),
+        }

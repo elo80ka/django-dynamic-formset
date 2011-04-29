@@ -1,23 +1,25 @@
+import django
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
 from django.views.generic.simple import direct_to_template
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+major, minor = django.VERSION[:2]
+is_pre12 = (major <= 1 and minor < 2)
 
 urlpatterns = patterns('',
-    (r'^$', direct_to_template, {'template': 'index.html'}),
+    (r'^$', direct_to_template, {'template': 'index.html', 'extra_context': dict(is_pre12=is_pre12)}),
     (r'^examples/', include('example.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    #(r'^admin/', include(admin.site.urls)),
 )
+
+try:
+    import ajax_select
+    # If django-ajax-selects is installed, include its URLs:
+    urlpatterns += patterns('',
+        (r'^ajax-select/', include('ajax_select.urls'))
+    )
+except ImportError:
+    pass
 
 if settings.DEBUG:
     urlpatterns += patterns('',

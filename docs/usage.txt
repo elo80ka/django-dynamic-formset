@@ -10,7 +10,7 @@ The 5-minute introduction
 If you have an existing project, it's quite easy to add
 client-side support for adding and removing forms.
 
-I'll assume you've already created your formsets. You can create
+I'll assume you've already created your formset. You can create
 formsets using any of the provided methods: both regular formsets
 (created with the ``formset_factory``) and inline formsets
 (created with the ``inlineformset_factory``) are supported.
@@ -113,7 +113,7 @@ To enable this behaviour, you'll need to do the following:
 
    Notice the ``{% if form.instance.pk %}...{% endif %}`` around
    ``{{ form.DELETE }}``? This is generally a good idea, since we only want
-   to delete instances that exist in the database.
+   Django to delete instances that already exist in the database.
 
 3. Call ``formset`` in your template, making sure to set the ``prefix``
    option::
@@ -295,8 +295,12 @@ complete list of available options is shown below::
         
 .. versionadded:: 1.3
 
-   ``keepFieldValues``
-        
+    ``keepFieldValues``
+        Set this to a jQuery selector, which should resolve to a list of elements
+        whose values should be preserved when the form is cloned.
+        Internally, this value is passed directly to the ``$.not(...)`` method.
+        This means you can also pass in DOM elements, or a function (in newer
+        versions of jQuery) as your selector.
 
 .. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
    Internally, the plugin uses the class names to target the add and delete

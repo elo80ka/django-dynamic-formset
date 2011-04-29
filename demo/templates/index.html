@@ -12,11 +12,15 @@
             <li><a href="{% url example_table %}">Basic Formset (Table layout)</a></li>
             <li><a href="{% url example_stacked %}">Basic Formset (DIV layout)</a></li>
             <li><a href="{% url example_inline_formset %}">Inline Formset</a></li>
-            <li><a href="{% url example_inline_autocomplete %}">Inline Formset using Autocomplete</a></li>
+            <li><a href="{% url example_inline_autocomplete %}">Inline Formset (using jQuery Autocomplete)</a></li>
+            {% comment %}<li><a href="{% url example_inline_ajax_selects %}">Inline Formset (using Django Ajax Selects)</a></li>{% endcomment %}
             <li><a href="{% url example_admin_widget %}">Basic Formset with Admin Widget</a></li>
             <li><a href="{% url example_multiple_formsets %}">Multiple formsets on the same page</a></li>
-            <li><a href="{% url example_form_template %}">Custom Form Template</a></li>
+            <li><a href="{% url example_form_template %}">Formset with `extra = 0` (pre Django 1.2)</a></li>
+            {% if not is_pre12 %}
+            <li><a href="{% url example_empty_form %}">Formset with `extra = 0` (Django 1.2+)</a></li>
             <li><a href="{% url example_max_forms %}">Limit allowed forms</a></li>
+            {% endif %}
         </ul>
     </div>
 </div>

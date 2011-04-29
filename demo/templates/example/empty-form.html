@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Formset with `extra = 0` (pre Django 1.2){% endblock %}
+{% block title %}Formset with `extra = 0` (Django 1.2+){% endblock %}
 
 {% block extrahead %}
 <script type="text/javascript">
     $(function() {
         $('form div').formset({
-            formTemplate: '#id_form_template'
+            formTemplate: '#id_empty_form',
+            extraClasses: ['row1', 'row2', 'row3']
         });
     });
 </script>
@@ -26,19 +27,24 @@
         padding-bottom:6px;
         border-bottom:1px dotted #ccc;
     }
+    .row1 { background-color: #f9f9f9; }
+    .row2 { background-color: #f3f3f3; }
+    .row3 { background-color: #ededed; }
 </style>
 {% endblock %}
 
 {% block content %}
 <div>
     <div class="entry">
-        <div id="id_form_template" style="display:none;">
+        {% with formset.empty_form as form %}
+        <div id="id_empty_form" style="display:none;">
             {{ form.type.label_tag }}<br />
             {{ form.type }}
             {{ form.value.label_tag }}<br />
             {{ form.value }}
             {{ form.preferred }} {{ form.preferred.label_tag }}
         </div>
+        {% endwith %}
         <form method="post" action="">
             <div></div>
             <p>
@@ -53,10 +59,12 @@
 {% block sidebar %}
 <p>
     If you'd rather not have extra forms in your template, pass `extra = 0` to `formset_factory`, and supply a custom form template.
-    Take a look at the source for `formset_with_template` in views.py, to see how this works.
+    This can easily be done using <a href="http://docs.djangoproject.com/en/dev/topics/forms/formsets/#empty-form">`formset.empty_form`</a>
+    in your template.
 </p>
 <p>
-    If you're using Django 1.2+, <a href="{% url example_empty_form %}">this is much easier</a>, using the new
-    <a href="http://docs.djangoproject.com/en/dev/topics/forms/formsets/#empty-form">`empty_form`</a> property.
+    Note that `$(...).formset()` doesn't need to be called on an actual form -- here, we call it on an empty DIV. You can think of the selector
+    as providing an "anchor point"; the "add another" link will be placed below this anchor point, and all cloned forms will appear between the
+    anchor and the "add" link.
 </p>
 {% endblock %}

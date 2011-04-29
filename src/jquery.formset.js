@@ -16,6 +16,7 @@
             flatExtraClasses = options.extraClasses.join(' '),
             totalForms = $('#id_' + options.prefix + '-TOTAL_FORMS'),
             maxForms = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
+            childElementSelector = 'input,select,textarea,label,div',
             $$ = $(this),
 
             applyExtraClasses = function(row, ndx) {
@@ -26,7 +27,7 @@
             },
 
             updateElementIndex = function(elem, prefix, ndx) {
-                var idRegex = new RegExp('(' + prefix + '-\\d+-)'),
+                var idRegex = new RegExp(prefix + '-(\\d+|__prefix__)-'),
                     replacement = prefix + '-' + ndx + '-';
                 if (elem.attr("for")) elem.attr("for", elem.attr("for").replace(idRegex, replacement));
                 if (elem.attr('id')) elem.attr('id', elem.attr('id').replace(idRegex, replacement));
@@ -34,7 +35,7 @@
             },
 
             hasChildElements = function(row) {
-                return row.find('input,select,textarea,label').length > 0;
+                return row.find(childElementSelector).length > 0;
             },
 
             showAddButton = function() {
@@ -74,13 +75,13 @@
                         forms = $('.' + options.formCssClass).not('.formset-custom-template');
                         totalForms.val(forms.length);
                     }
-                    // Apply extraClasses to form rows so they're nicely alternating.
-                    // Also update names and IDs for all child controls, if this isn't a delete-able
-                    // inline formset, so they remain in sequence.
                     for (var i=0, formCount=forms.length; i<formCount; i++) {
+                        // Apply `extraClasses` to form rows so they're nicely alternating:
                         applyExtraClasses(forms.eq(i), i);
                         if (!del.length) {
-                            forms.eq(i).find('input,select,textarea,label').each(function() {
+                            // Also update names and IDs for all child controls (if this isn't
+                            // a delete-able inline formset) so they remain in sequence:
+                            forms.eq(i).find(childElementSelector).each(function() {
                                 updateElementIndex($(this), options.prefix, i);
                             });
                         }
@@ -128,8 +129,8 @@
                 // If a form template was specified, we'll clone it to generate new form instances:
                 template = (options.formTemplate instanceof $) ? options.formTemplate : $(options.formTemplate);
                 template.removeAttr('id').addClass(options.formCssClass + ' formset-custom-template');
-                template.find('input,select,textarea,label').each(function() {
-                    updateElementIndex($(this), options.prefix, 2012);
+                template.find(childElementSelector).each(function() {
+                    updateElementIndex($(this), options.prefix, '__prefix__');
                 });
                 insertDeleteLink(template);
             } else {
@@ -138,7 +139,7 @@
                 template = $('.' + options.formCssClass + ':last').clone(true).removeAttr('id');
                 template.find('input:hidden[id $= "-DELETE"]').remove();
                 // Clear all cloned fields, except those the user wants to keep (thanks to brunogola for the suggestion):
-                template.find('input,select,textarea').not(options.keepFieldValues).each(function() {
+                template.find(childElementSelector).not(options.keepFieldValues).each(function() {
                     var elem = $(this);
                     // If this is a checkbox or radiobutton, uncheck it.
                     // This fixes Issue 1, reported by Wilson.Andrew.J:
@@ -173,7 +174,7 @@
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
                 applyExtraClasses(row, formCount);
                 row.insertBefore(buttonRow).show();
-                row.find('input,select,textarea,label').each(function() {
+                row.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
                 totalForms.val(formCount + 1);

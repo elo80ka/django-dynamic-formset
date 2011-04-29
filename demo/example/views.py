@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render_to_response, redirect
 from django.template.context import RequestContext
 from example.forms import ContactFormset, EventFormset, Order, OrderForm, get_ordereditem_formset
+from example.forms import AutoCompleteSelectFieldForm
 from example.models import Order, Product
 
 def autocomplete_products(request):
@@ -26,15 +27,20 @@ def formset(request, formset_class, template):
         context_instance=RequestContext(request))
 
 def formset_with_template(request, formset_class, template):
-    # We can initialize our form template with default data:
-    form = formset_class.form(initial={'type': 'Email', 'value': 'john.Q@public.net'})
+    # If you're using a Django version older than 1.2, you won't have `formset.empty_form`;
+    # You can create your own "empty form" instance, and even initialize it with default data.
+    # Make sure to set the prefix as shown, so things work as expected:
+    formset = formset_class()
+    form = formset.form(
+        prefix='%s-__prefix__' % formset.prefix,
+        initial={
+            'type': 'Email',
+            'value': 'john.Q@public.net'})
     if request.method == 'POST':
         formset = formset_class(request.POST)
         if formset.is_valid():
             data = formset.cleaned_data
             return display_data(request, data)
-    else:
-        formset = formset_class()
     return render_to_response(template, {'form': form, 'formset': formset},
         context_instance=RequestContext(request))
 
