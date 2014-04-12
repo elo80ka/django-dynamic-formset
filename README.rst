@@ -1,4 +1,3 @@
-============================================
 A jQuery plugin for managing Django formsets
 ============================================
 
@@ -9,9 +8,9 @@ For installation instructions, see the file ``INSTALL.txt`` in
 this directory; for documentation see the files in the ``docs/``
 directory.
 
-The latest versions of these documents can always be found on the
-Google Code project web site for this application, which is located at
-http://code.google.com/p/django-dynamic-formset/.
+The latest versions of these documents can be found on the
+Github web site for this application, which is located at
+https://github.com/elo80ka/django-dynamic-formset.
 
 .. _jQuery: http://jquery.com/
 .. _Django: http://www.djangoproject.com/
