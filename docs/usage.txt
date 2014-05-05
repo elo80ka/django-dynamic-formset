@@ -269,9 +269,9 @@ complete list of available options is shown below::
         was just removed.
 
     ``deleteWrapper``
-        An element that is already within the form that the generated delete
-        links will be added to. If specified, this should be a jQuery selector.
-        If not specified, delete links will be appended to the end of a row
+        An element (should already be present) that the generated delete links
+        will be added to. If specified, this should be a jQuery selector. If
+        not specified, delete links will be appended to the end of a row
         by default.
 
 .. versionadded:: 1.1
