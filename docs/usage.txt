@@ -268,6 +268,12 @@ complete list of available options is shown below::
         ``row``; it will be passed a jQuery object, wrapping the form that
         was just removed.
 
+    ``deleteWrapper``
+        An element that is already within the form that the generated delete
+        links will be added to. If specified, this should be a jQuery selector.
+        If not specified, delete links will be appended to the end of a row
+        by default.
+
 .. versionadded:: 1.1
 
     ``formCssClass``
