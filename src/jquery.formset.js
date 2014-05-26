@@ -40,7 +40,7 @@
 
             showAddButton = function() {
                 return maxForms.length == 0 ||   // For Django versions pre 1.2
-                    (maxForms.val() == '' || (maxForms.val() - totalForms.val() > 0))
+                    (maxForms.val() == '' || (maxForms.val() - totalForms.val() > 0));
             },
 
             insertDeleteLink = function(row) {
@@ -187,7 +187,7 @@
         }
 
         return $$;
-    }
+    };
 
     /* Setup plugin defaults */
     $.fn.formset.defaults = {
@@ -203,4 +203,4 @@
         added: null,                     // Function called each time a new form is added
         removed: null                    // Function called each time a form is deleted
     };
-})(jQuery)
+})(jQuery);
