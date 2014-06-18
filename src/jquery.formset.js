@@ -44,7 +44,11 @@
             },
 
             insertDeleteLink = function(row) {
-                if (row.is('TR')) {
+                if (options.deleteWrapper !== null){
+                    // If a wrapper selector is specified, append to an
+                    // element matching that selector within the row:
+                    row.find(options.deleteWrapper).append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>')
+                } else if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
                     row.children(':last').append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
@@ -195,6 +199,7 @@
         formTemplate: null,              // The jQuery selection cloned to generate new form instances
         addText: 'add another',          // Text for the add link
         deleteText: 'remove',            // Text for the delete link
+        deleteWrapper: null,             // jQuery selector for which element delete button should be appended to
         addCssClass: 'add-row',          // CSS class applied to the add link
         deleteCssClass: 'delete-row',    // CSS class applied to the delete link
         formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
