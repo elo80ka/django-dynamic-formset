@@ -12,10 +12,13 @@
 ;(function($) {
     $.fn.formset = function(opts)
     {
+        opts.prefix = opts.prefix || $(this).data('prefix');
+
         var options = $.extend({}, $.fn.formset.defaults, opts),
             flatExtraClasses = options.extraClasses.join(' '),
             totalForms = $('#id_' + options.prefix + '-TOTAL_FORMS'),
             maxForms = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
+            minNum = options.minNum || parseInt($('#id_' + options.prefix + '-INITIAL_FORMS').val()),
             childElementSelector = 'input,select,textarea,label,div',
             $$ = $(this),
 
@@ -43,7 +46,10 @@
                     (maxForms.val() == '' || (maxForms.val() - totalForms.val() > 0));
             },
 
-            insertDeleteLink = function(row) {
+            insertDeleteLink = function(row, i) {
+                if (i < minNum) {
+                    return
+                }
                 if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
@@ -52,7 +58,7 @@
                     // If they're laid out as an ordered/unordered list,
                     // insert an <li> after the last list item:
                     row.append('<li><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a></li>');
-                } else {
+                } else if (row.find('a.' + options.deleteCssClass).length == 0) {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:
                     row.append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>');
@@ -116,7 +122,7 @@
             if (hasChildElements(row)) {
                 row.addClass(options.formCssClass);
                 if (row.is(':visible')) {
-                    insertDeleteLink(row);
+                    insertDeleteLink(row, i);
                     applyExtraClasses(row, i);
                 }
             }
@@ -163,7 +169,9 @@
                 if (hideAddButton) buttonRow.hide();
                 addButton = buttonRow.find('a');
             } else {
-                // Otherwise, insert it immediately after the last form:
+                // Remove existing
+                $('a.' + options.addCssClass).remove();
+                // Insert it immediately after the last form
                 $$.filter(':last').after('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
                 addButton = $$.filter(':last').next();
                 if (hideAddButton) addButton.hide();
@@ -191,7 +199,8 @@
 
     /* Setup plugin defaults */
     $.fn.formset.defaults = {
-        prefix: 'form',                  // The form prefix for your django formset
+        prefix: null,                    // The form prefix for your django formset, if not set reads from data-prefix
+        minNum: null,                    // Minimum count rows, if not set uses initial_form_count
         formTemplate: null,              // The jQuery selection cloned to generate new form instances
         addText: 'add another',          // Text for the add link
         deleteText: 'remove',            // Text for the delete link
