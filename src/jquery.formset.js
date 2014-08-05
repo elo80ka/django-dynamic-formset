@@ -18,7 +18,7 @@
             flatExtraClasses = options.extraClasses.join(' '),
             totalForms = $('#id_' + options.prefix + '-TOTAL_FORMS'),
             maxForms = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
-            minNum = options.minNum || parseInt($('#id_' + options.prefix + '-INITIAL_FORMS').val()),
+            minNum = Math.max(1, options.minNum || parseInt($('#id_' + options.prefix + '-INITIAL_FORMS').val())),
             childElementSelector = 'input,select,textarea,label,div',
             $$ = $(this),
 
@@ -138,7 +138,6 @@
                 template.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, '__prefix__');
                 });
-                insertDeleteLink(template);
             } else {
                 // Otherwise, use the last form in the formset; this works much better if you've got
                 // extra (>= 1) forms (thnaks to justhamade for pointing this out):
@@ -186,6 +185,7 @@
                     updateElementIndex($(this), options.prefix, formCount);
                 });
                 totalForms.val(formCount + 1);
+                insertDeleteLink(row, formCount + 1);
                 // Check if we've exceeded the maximum allowed number of forms:
                 if (!showAddButton()) buttonRow.hide();
                 // If a post-add callback was supplied, call it with the added form:
