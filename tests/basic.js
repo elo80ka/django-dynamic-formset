@@ -107,43 +107,75 @@
         assert.ok(!$('#stacked-form .dynamic-form:last input:checkbox').attr('checked'), 'Cloned Checkbox element is unchecked.');
     });
     
-    var addCallback, delCallback;
+    (function () {
+        var addCallback, delCallback;
+        
+        module('Basic Formset Tests', {
+            setup: function () {
+                addCallback = new Mock();
+                addCallback.calls(3).required(1);
+                delCallback = new Mock();
+                delCallback.calls(1).required(1);
+                
+                $('#stacked-form div').formset({
+                    keepFieldValues: 'input:text',
+                    added: addCallback,
+                    removed: delCallback
+                });
+            }
+        });
+        
+        test('Test Excluded Form Elements Are Ignored', function (assert) {
+            assert.equal($('#stacked-form .dynamic-form').size(), 1, 'One default form present.');
+            assert.equal($('#stacked-form .dynamic-form:first input:text').val(), 'me@example.com', 'Default INPUT element has value "me@example.com".');
+            $('#stacked-form .add-row').trigger('click');
+            assert.equal($('#stacked-form .dynamic-form').size(), 2, 'Cloned form added.');
+            assert.equal($('#stacked-form .dynamic-form:last input:text').val(), 'me@example.com', 'Cloned INPUT element still has value "me@example.com".');
+        });
+        
+        test('Test "added" callback called once, for each form added', function (assert) {
+            var i;
+            for (i = 0; i < 3; i += 1) {
+                $('#stacked-form .add-row').trigger('click');
+            }
+            assert.ok(addCallback.verify(), '"Added" callback called 3 times, with a single argument.');
+        });
+        
+        test('Test "removed" callback called once, for each form deleted', function (assert) {
+            assert.equal($('#stacked-form .dynamic-form').size(), 1, 'One default form present.');
+            assert.equal($('#stacked-form .dynamic-form:first .delete-row:visible').size(), 1, 'Default form has active delete button.');
+            $('#stacked-form .dynamic-form:first .delete-row').trigger('click');
+            assert.ok(delCallback.verify(), '"Removed" callback called once, with a single argument.');
+        });
+    }());
+    
     
     module('Basic Formset Tests', {
         setup: function () {
-            addCallback = new Mock();
-            addCallback.calls(3).required(1);
-            delCallback = new Mock();
-            delCallback.calls(1).required(1);
-            
             $('#stacked-form div').formset({
-                keepFieldValues: 'input:text',
-                added: addCallback,
-                removed: delCallback
+                addCssClass: 'btn btn-add',
+                deleteCssClass: 'btn btn-danger'
             });
         }
     });
     
-    test('Test Excluded Form Elements Are Ignored', function (assert) {
-        assert.equal($('#stacked-form .dynamic-form').size(), 1, 'One default form present.');
-        assert.equal($('#stacked-form .dynamic-form:first input:text').val(), 'me@example.com', 'Default INPUT element has value "me@example.com".');
-        $('#stacked-form .add-row').trigger('click');
-        assert.equal($('#stacked-form .dynamic-form').size(), 2, 'Cloned form added.');
-        assert.equal($('#stacked-form .dynamic-form:last input:text').val(), 'me@example.com', 'Cloned INPUT element still has value "me@example.com".');
+    test('Test Form Addition With Multiple AddCssClasses', function (assert) {
+        var $btn = $('#stacked-form .btn-add');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '1', 'Default form is present.');
+        assert.ok($btn.hasClass('btn'), 'Add button has class "btn" applied to it.');
+        assert.ok($btn.hasClass('btn-add'), 'Add button has class "btn-add" applied to it.');
+        $btn.trigger('click');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '2', 'Updated "Total Forms" count.');
+        assert.equal($('#stacked-form div').size(), 2, 'Added new form.');
     });
     
-    test('Test "added" callback called once, for each form added', function (assert) {
-        var i;
-        for (i = 0; i < 3; i += 1) {
-            $('#stacked-form .add-row').trigger('click');
-        }
-        assert.ok(addCallback.verify(), '"Added" callback called 3 times, with a single argument.');
-    });
-    
-    test('Test "removed" callback called once, for each form deleted', function (assert) {
-        assert.equal($('#stacked-form .dynamic-form').size(), 1, 'One default form present.');
-        assert.equal($('#stacked-form .dynamic-form:first .delete-row:visible').size(), 1, 'Default form has active delete button.');
-        $('#stacked-form .dynamic-form:first .delete-row').trigger('click');
-        assert.ok(delCallback.verify(), '"Removed" callback called once, with a single argument.');
+    test('Test Form Removal With Multiple DeleteCssClasses', function (assert) {
+        var $btn = $('#stacked-form .btn-danger');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '1', 'Default form is present.');
+        assert.ok($btn.hasClass('btn'), 'Remove button has class "btn" applied to it.');
+        assert.ok($btn.hasClass('btn-danger'), 'Remove button has class "btn-danger" applied to it.');
+        $btn.trigger('click');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '0', 'Updated "Total Forms" count.');
+        assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
     });
 }(jQuery));
