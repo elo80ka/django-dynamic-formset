@@ -1,3 +1,6 @@
+.. image:: https://secure.travis-ci.org/elo80ka/django-dynamic-formset.png?branch=master
+   :target: http://travis-ci.org/#!/elo80ka/django-dynamic-formset
+   
 A jQuery plugin for managing Django formsets
 ============================================
 
@@ -10,7 +13,7 @@ directory.
 
 The latest versions of these documents can be found on the
 Github web site for this application, which is located at
-https://github.com/elo80ka/django-dynamic-formset.
+`https://github.com/elo80ka/django-dynamic-formset`.
 
 .. _jQuery: http://jquery.com/
 .. _Django: http://www.djangoproject.com/
