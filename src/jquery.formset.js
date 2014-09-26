@@ -72,9 +72,9 @@
                         row.hide();
                         forms = $('.' + options.formCssClass).not(':hidden');
                     } else {
-                        row.remove();
                         // Update the TOTAL_FORMS count:
-                        forms = $('.' + options.formCssClass).not('.formset-custom-template');
+                        forms = row.parent().find('.' + options.formCssClass + ':not(\'.formset-custom-template\')');
+                        row.remove();
                         totalForms.val(forms.length);
                     }
                     for (var i=0, formCount=forms.length; i<formCount; i++) {
