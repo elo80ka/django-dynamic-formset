@@ -59,7 +59,7 @@
                     // last child element of the form's container:
                     row.append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>');
                 }
-                row.find('a.' + delCssSelector).click(function() {
+                var delButton = row.find('a.' + delCssSelector).click(function() {
                     var row = $(this).parents('.' + options.formCssClass),
                         del = row.find('input:hidden[id $= "-DELETE"]'),
                         buttonRow = row.siblings("a." + addCssSelector + ', .' + options.formCssClass + '-add'),
@@ -94,6 +94,9 @@
                     if (options.removed) options.removed(row);
                     return false;
                 });
+                if (options.deleteWrap) {
+                    delButton.wrap(options.deleteWrap);
+                }
             };
 
         $$.each(function(i) {
@@ -126,6 +129,7 @@
 
         if ($$.length) {
             var hideAddButton = !showAddButton(),
+                wrapDepth = 0,
                 addButton, template;
             if (options.formTemplate) {
                 // If a form template was specified, we'll clone it to generate new form instances:
@@ -161,21 +165,40 @@
                 var numCols = $$.eq(0).children().length,   // This is a bit of an assumption :|
                     buttonRow = $('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>')
                                 .addClass(options.formCssClass + '-add');
-                $$.parent().append(buttonRow);
+                if (options.addInsert) {
+                    options.addInsert($$, addButton);
+                } else {
+                    $$.parent().append(buttonRow);
+                }
                 if (hideAddButton) buttonRow.hide();
                 addButton = buttonRow.find('a');
             } else {
                 // Otherwise, insert it immediately after the last form:
-                $$.filter(':last').after('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
-                addButton = $$.filter(':last').next();
+                addButton = $('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
+                if (options.addInsert) {
+                    options.addInsert($$, addButton);
+                } else {
+                    addButton.insertAfter($$.filter(':last'));
+                }
                 if (hideAddButton) addButton.hide();
+            }
+            if (options.addWrap) {
+                addButton.wrap(options.addWrap);
+                wrapDepth = $('<div/>').wrap(options.addWrap).parents().length;
             }
             addButton.click(function() {
                 var formCount = parseInt(totalForms.val()),
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
+                if (options.addWrap && buttonRow[0] === this) {
+                    buttonRow = buttonRow.parents().eq(wrapDepth - 1);
+                }
                 applyExtraClasses(row, formCount);
-                row.insertBefore(buttonRow).show();
+                if (options.formInsert) {
+                    options.formInsert($$, buttonRow, row);
+                } else {
+                    row.insertBefore(buttonRow).show();
+                }
                 row.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
@@ -199,6 +222,10 @@
         deleteText: 'remove',            // Text for the delete link
         addCssClass: 'add-row',          // CSS class applied to the add link
         deleteCssClass: 'delete-row',    // CSS class applied to the delete link
+        addWrap: null,                   // Argument for jQuery .wrap for add link
+        deleteWrap: null,                // Argument for jQuery .wrap for delete link
+        addInsert: null,                 // Function called to insert the add link
+        formInsert: null,                // Function called to insert a new form
         formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
         keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
