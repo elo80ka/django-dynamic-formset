@@ -40,8 +40,13 @@
             },
 
             showAddButton = function() {
+                var forms = $$.not('.formset-custom-template'),
+                    isInline = (forms.find('input:hidden[id $= "-DELETE"]').length > 0);
                 return maxForms.length == 0 ||   // For Django versions pre 1.2
-                    (maxForms.val() == '' || (maxForms.val() - totalForms.val() > 0));
+                    maxForms.val() == '' ||
+                    (maxForms.val() - totalForms.val() > 0) ||
+                    (isInline && maxForms.val() - forms.filter(':visible').length > 0)
+                ;
             },
 
             insertDeleteLink = function(row) {
@@ -73,6 +78,7 @@
                         forms = $('.' + options.formCssClass).not(':hidden');
                     } else {
                         row.remove();
+                        $$ = $$.not(row);
                         // Update the TOTAL_FORMS count:
                         forms = $('.' + options.formCssClass).not('.formset-custom-template');
                         totalForms.val(forms.length);
@@ -128,8 +134,7 @@
         });
 
         if ($$.length) {
-            var hideAddButton = !showAddButton(),
-                addButton, template;
+            var addButton, template;
             if (options.formTemplate) {
                 // If a form template was specified, we'll clone it to generate new form instances:
                 template = (options.formTemplate instanceof $) ? options.formTemplate : $(options.formTemplate);
@@ -189,7 +194,7 @@
                     $('<div/>').wrap(options.addWrap).parents().length - 1
                 );
             }
-            if (hideAddButton) addButtonRow.hide();
+            if (!showAddButton()) addButtonRow.hide();
             addButton.click(function() {
                 var formCount = parseInt(totalForms.val()),
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template');
@@ -199,6 +204,7 @@
                 } else {
                     row.insertBefore(addButtonRow).show();
                 }
+                $$ = $$.add(row);
                 row.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
