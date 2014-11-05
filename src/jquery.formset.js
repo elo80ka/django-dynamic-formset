@@ -18,6 +18,7 @@
             maxForms = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
             childElementSelector = 'input,select,textarea,label,div',
             $$ = $(this),
+            addButtonRow,
 
             applyExtraClasses = function(row, ndx) {
                 if (options.extraClasses) {
@@ -62,7 +63,6 @@
                 var delButton = row.find('a.' + delCssSelector).click(function() {
                     var row = $(this).parents('.' + options.formCssClass),
                         del = row.find('input:hidden[id $= "-DELETE"]'),
-                        buttonRow = row.siblings("a." + addCssSelector + ', .' + options.formCssClass + '-add'),
                         forms;
                     if (del.length) {
                         // We're dealing with an inline formset.
@@ -89,7 +89,7 @@
                         }
                     }
                     // Check if we need to show the add button:
-                    if (buttonRow.is(':hidden') && showAddButton()) buttonRow.show();
+                    if (addButtonRow.is(':hidden') && showAddButton()) addButtonRow.show();
                     // If a post-delete callback was provided, call it with the deleted form:
                     if (options.removed) options.removed(row);
                     return false;
@@ -129,7 +129,6 @@
 
         if ($$.length) {
             var hideAddButton = !showAddButton(),
-                wrapDepth = 0,
                 addButton, template;
             if (options.formTemplate) {
                 // If a form template was specified, we'll clone it to generate new form instances:
@@ -162,49 +161,50 @@
             if ($$.is('TR')) {
                 // If forms are laid out as table rows, insert the
                 // "add" button in a new table row:
-                var numCols = $$.eq(0).children().length,   // This is a bit of an assumption :|
-                    buttonRow = $('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>')
-                                .addClass(options.formCssClass + '-add');
+                var numCols = $$.eq(0).children().length;   // This is a bit of an assumption :|
+                addButtonRow = $('<tr><td colspan="' + numCols + '"><a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a></tr>')
+                    .addClass(options.formCssClass + '-add');
                 if (options.addInsert) {
-                    options.addInsert($$, addButton);
+                    options.addInsert($$, addButtonRow);
                 } else {
-                    $$.parent().append(buttonRow);
+                    $$.parent().append(addButtonRow);
                 }
-                if (hideAddButton) buttonRow.hide();
-                addButton = buttonRow.find('a');
+                addButton = addButtonRow.find('a');
             } else {
                 // Otherwise, insert it immediately after the last form:
                 addButton = $('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
+                addButtonRow = addButton;
                 if (options.addInsert) {
                     options.addInsert($$, addButton);
                 } else {
                     addButton.insertAfter($$.filter(':last'));
                 }
-                if (hideAddButton) addButton.hide();
             }
             if (options.addWrap) {
+                // Wrap the addButton
                 addButton.wrap(options.addWrap);
-                wrapDepth = $('<div/>').wrap(options.addWrap).parents().length;
+                // Find the wrapper's container by wrapping an empty element
+                // outside the DOM and finding how many parents it has
+                addButtonRow = addButton.parents().eq(
+                    $('<div/>').wrap(options.addWrap).parents().length - 1
+                );
             }
+            if (hideAddButton) addButtonRow.hide();
             addButton.click(function() {
                 var formCount = parseInt(totalForms.val()),
-                    row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
-                    buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
-                if (options.addWrap && buttonRow[0] === this) {
-                    buttonRow = buttonRow.parents().eq(wrapDepth - 1);
-                }
+                    row = options.formTemplate.clone(true).removeClass('formset-custom-template');
                 applyExtraClasses(row, formCount);
                 if (options.formInsert) {
-                    options.formInsert($$, buttonRow, row);
+                    options.formInsert($$, addButtonRow, row);
                 } else {
-                    row.insertBefore(buttonRow).show();
+                    row.insertBefore(addButtonRow).show();
                 }
                 row.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
                 totalForms.val(formCount + 1);
                 // Check if we've exceeded the maximum allowed number of forms:
-                if (!showAddButton()) buttonRow.hide();
+                if (!showAddButton()) addButtonRow.hide();
                 // If a post-add callback was supplied, call it with the added form:
                 if (options.added) options.added(row);
                 return false;
