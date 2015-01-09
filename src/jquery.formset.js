@@ -43,13 +43,22 @@
                     (maxForms.val() == '' || (maxForms.val() - totalForms.val() > 0));
             },
 
+            getDeleteLinkContainer = function (row){
+                if (opts['getDeleteLinkContainer'] == null){
+                    return row.children(':last')
+                } else{
+                    return opts['getDeleteLinkContainer'](row);
+                }
+
+            },
+
             insertDeleteLink = function(row) {
                 var delCssSelector = options.deleteCssClass.trim().replace(/\s+/g, '.'),
                     addCssSelector = options.addCssClass.trim().replace(/\s+/g, '.');
                 if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
-                    // the remove button into the last table cell:
-                    row.children(':last').append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
+                    // the remove button -by default- into the last table cell:
+                    getDeleteLinkContainer(row).append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
                 } else if (row.is('UL') || row.is('OL')) {
                     // If they're laid out as an ordered/unordered list,
                     // insert an <li> after the last list item:
@@ -117,10 +126,10 @@
             }
             if (hasChildElements(row)) {
                 row.addClass(options.formCssClass);
-                if (row.is(':visible')) {
+//                if (row.is(':visible')) {  //commented out this line , Fixes taxes formset issue + see no good out of it
                     insertDeleteLink(row);
                     applyExtraClasses(row, i);
-                }
+//                }
             }
         });
 
@@ -203,6 +212,8 @@
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
         keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
         added: null,                     // Function called each time a new form is added
-        removed: null                    // Function called each time a form is deleted
+        removed: null,                    // Function called each time a form is deleted
+        getDeleteLinkContainer:null      // function to get the container where the delete link should be added
+
     };
 })(jQuery);
