@@ -126,10 +126,10 @@
             }
             if (hasChildElements(row)) {
                 row.addClass(options.formCssClass);
-                if (row.is(':visible')) {
+//                if (row.is(':visible')) {  //commented out this line , Fixes taxes formset issue + see no good out of it
                     insertDeleteLink(row);
                     applyExtraClasses(row, i);
-                }
+//                }
             }
         });
 
