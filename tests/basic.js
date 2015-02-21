@@ -8,6 +8,10 @@
         assert.equal($.fn.formset.defaults.deleteText, 'remove', 'deleteText: "remove"');
         assert.equal($.fn.formset.defaults.addCssClass, 'add-row', 'addCssClass: "add-row"');
         assert.equal($.fn.formset.defaults.deleteCssClass, 'delete-row', 'deleteCssClass: "delete-row"');
+        assert.equal($.fn.formset.defaults.addWrap, null, 'addWrap: null');
+        assert.equal($.fn.formset.defaults.deleteWrap, null, 'deleteWrap: null');
+        assert.equal($.fn.formset.defaults.addInsert, null, 'addInsert: null');
+        assert.equal($.fn.formset.defaults.formInsert, null, 'formInsert: null');
         assert.equal($.fn.formset.defaults.formCssClass, 'dynamic-form', 'formCssClass: "dynamic-form"');
         assert.deepEqual($.fn.formset.defaults.extraClasses, [], 'extraClasses: []');
         assert.equal($.fn.formset.defaults.keepFieldValues, '', 'keepFieldValues: ');
@@ -178,4 +182,72 @@
         assert.equal($('#id_form-TOTAL_FORMS').val(), '0', 'Updated "Total Forms" count.');
         assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
     });
+    
+    
+    module('Basic Formset Tests', {
+        setup: function () {
+            $('#stacked-form div').formset({
+                addCssClass: 'btn-add',
+                deleteCssClass: 'btn-delete',
+                // Use spans to avoid clashing with #stacked-form divs
+                addWrap: '<span class="add-wrap"></span>',
+                deleteWrap: '<span class="delete-wrap"></span>'
+            });
+        }
+    });
+    
+    test('Test Form Addition With addWrap', function (assert) {
+        var $btn = $('#stacked-form .btn-add');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '1', 'Default form is present.');
+        assert.ok($btn.hasClass('btn-add'), 'Add button has class "btn-add" applied to it.');
+        assert.ok($btn.parent().is('span'), 'Add button is wrapped in "span".');
+        assert.ok($btn.parent().hasClass('add-wrap'), 'Add button is wrapped in "span.add-wrap".');
+        $btn.trigger('click');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '2', 'Updated "Total Forms" count.');
+        assert.equal($('#stacked-form div').size(), 2, 'Added new form.');
+    });
+    
+    test('Test Form Removal With deleteWrap', function (assert) {
+        var $btn = $('#stacked-form .btn-delete');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '1', 'Default form is present.');
+        assert.ok($btn.hasClass('btn-delete'), 'Remove button has class "btn-delete" applied to it.');
+        assert.ok($btn.parent().is('span'), 'Remove button is wrapped in "span".');
+        assert.ok($btn.parent().hasClass('delete-wrap'), 'Remove button is wrapped in "span.delete-wrap".');
+        $btn.trigger('click');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '0', 'Updated "Total Forms" count.');
+        assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
+    });
+    
+    
+    module('Basic Formset Tests', {
+        setup: function () {
+            $('#stacked-form div').formset({
+                addCssClass: 'btn-add',
+                // Test by adding to the top instead of bottom
+                addInsert: function ($$, addButton) {
+                    $$.parent().prepend(addButton);
+                },
+                formInsert: function ($$, buttonRow, formRow) {
+                    formRow.insertAfter(buttonRow).show();
+                }
+            });
+        }
+    });
+    
+    test('Test Form Addition With custom addInsert and formInsert', function (assert) {
+        var idRegex = /id_form-(\d+)-(\w+)/,
+            $btn = $('#stacked-form .btn-add');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '1', 'Default form is present.');
+        assert.equal($('#stacked-form div').size(), 1, 'Default form is div.');
+        assert.ok($btn.hasClass('btn-add'), 'Add button has class "btn-add" applied to it.');
+        assert.equal($('#stacked-form :first')[0], $btn[0], 'Add button is at top.');
+        
+        assert.equal($('#stacked-form div:first label').attr('for').match(idRegex)[1], 0, 'Default form is first form.');
+        $btn.trigger('click');
+        assert.equal($('#id_form-TOTAL_FORMS').val(), '2', 'Updated "Total Forms" count.');
+        assert.equal($('#stacked-form div').size(), 2, 'Added new form.');
+        assert.equal($('#stacked-form div:first label').attr('for').match(idRegex)[1], 1, 'Added form is first form.');
+        assert.equal($('#stacked-form :first')[0], $btn[0], 'Add button is still at top.');
+    });
+    
 }(jQuery));

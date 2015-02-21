@@ -234,73 +234,106 @@ Formset options
 You can customize this plugin's behavior by passing an options hash. A
 complete list of available options is shown below::
 
-    ``prefix``
-        Use this to specify the prefix for your formset if it's anything
-        other than the default ("form"). This option must be supplied for
-        inline formsets.
+``prefix``
+   Use this to specify the prefix for your formset if it's anything
+   other than the default ("form"). This option must be supplied for
+   inline formsets.
 
-    ``addText``
-        Use this to set the text for the generated add link. The default
-        text is "add another".
+``addText``
+   Use this to set the text for the generated add link. The default
+   text is "add another".
 
-    ``deleteText``
-        Use this to set the text for the generated delete links. The
-        default text is "remove".
+``deleteText``
+   Use this to set the text for the generated delete links. The
+   default text is "remove".
 
-    ``addCssClass``
-        Use this to change the default CSS class applied to the generated
-        add link (possibly, to avoid CSS conflicts within your templates).
-        The default class is "add-row".
+``addCssClass``
+   Use this to change the default CSS class applied to the generated
+   add link (possibly, to avoid CSS conflicts within your templates).
+   The default class is "add-row".
 
-    ``deleteCssClass``
-        Use this to change the default CSS class applied to the generated
-        delete links. The default class is "delete-row".
+``deleteCssClass``
+   Use this to change the default CSS class applied to the generated
+   delete links. The default class is "delete-row".
 
-    ``added``
-        If you set this to a function, that function will be called each
-        time a new form is added. The function should take a single argument,
-        ``row``; it will be passed a jQuery object, wrapping the form that
-        was just added.
+``added``
+   If you set this to a function, that function will be called each
+   time a new form is added. The function should take a single argument,
+   ``row``; it will be passed a jQuery object, wrapping the form that
+   was just added.
 
-    ``removed``
-        Set this to a function, and that function will be called each time
-        a form is deleted. The function should take a single argument,
-        ``row``; it will be passed a jQuery object, wrapping the form that
-        was just removed.
+``removed``
+   Set this to a function, and that function will be called each time
+   a form is deleted. The function should take a single argument,
+   ``row``; it will be passed a jQuery object, wrapping the form that
+   was just removed.
 
 .. versionadded:: 1.1
-
-    ``formCssClass``
-        Use this to set the CSS class applied to all forms within the same
-        formset. Internally, all forms with the same class are assumed to
-        belong to the same formset. If you have multiple formsets on a single
-        HTML page, you MUST provide unique class names for each formset. If
-        you don't provide a value, this defaults to "dynamic-form".
-
-        For more information, see the section on :ref:`Using multiple Formsets
-        on the same page <using-multiple-formsets>`, and check out the example
-        in the demo project.
+``formCssClass``
+   Use this to set the CSS class applied to all forms within the same
+   formset. Internally, all forms with the same class are assumed to
+   belong to the same formset. If you have multiple formsets on a single
+   HTML page, you MUST provide unique class names for each formset. If
+   you don't provide a value, this defaults to "dynamic-form".
+   
+   For more information, see the section on :ref:`Using multiple Formsets
+   on the same page <using-multiple-formsets>`, and check out the example
+   in the demo project.
 
 .. versionadded:: 1.2
+``formTemplate``
+   Use this to override the form that gets cloned, each time a new form
+   instance is added. If specified, this should be a jQuery selector.
 
-    ``formTemplate``
-        Use this to override the form that gets cloned, each time a new form
-        instance is added. If specified, this should be a jQuery selector.
+``extraClasses``
+   Set this to an array of CSS class names (defaults to an empty array),
+   and the classes will be applied to each form in the formset in turn.
+   This can easily be used to acheive row-striping effects, which can
+   make large formsets easier to deal with visually.
 
-    ``extraClasses``
-        Set this to an array of CSS class names (defaults to an empty array),
-        and the classes will be applied to each form in the formset in turn.
-        This can easily be used to acheive row-striping effects, which can
-        make large formsets easier to deal with visually.
-        
 .. versionadded:: 1.3
+``keepFieldValues``
+   Set this to a jQuery selector, which should resolve to a list of elements
+   whose values should be preserved when the form is cloned.
+   Internally, this value is passed directly to the ``$.not(...)`` method.
+   This means you can also pass in DOM elements, or a function (in newer
+   versions of jQuery) as your selector.
 
-    ``keepFieldValues``
-        Set this to a jQuery selector, which should resolve to a list of elements
-        whose values should be preserved when the form is cloned.
-        Internally, this value is passed directly to the ``$.not(...)`` method.
-        This means you can also pass in DOM elements, or a function (in newer
-        versions of jQuery) as your selector.
+``addWrap``
+   This value will be passed to jQuery ``.wrap`` to wrap the add button
+   in elements for additional styling.
+
+``deleteWrap``
+   This value will be passed to jQuery ``.wrap`` to wrap the delete button
+   in elements for additional styling.
+
+``addInsert``
+   If you set this to a function, that function will take responsibility
+   for inserting the add button into the page. It should take two
+   arguments: ``$$``, the original jQuery object you are applying the
+   formset to; and ``buttonRow``, the button element (or element
+   containing the button).
+   It does not need to return anything.
+   
+   If you do not set ``formInsert`` (see below), the button needs to be
+   added as a sibling of ``$$``.
+   
+   This can be used to put the add button at the top of the forms, or
+   above a hidden ``formTemplate`` to avoid styling issues.
+
+``formInsert``
+   If you set this to a function, that function will take responsibility
+   for inserting new forms into the page and showing them (eg with jQuery
+   ``.show()``). It should take three arguments:
+   ``$$``, the original jQuery object you are applying the formset to;
+   ``buttonRow``, the row or element containing the add button; and
+   ``formRow``, the new row or element containing the new form.
+   It does not need to return anything.
+   
+   This can be used to add animations to reveal new forms
+   (eg ``formRow.insertBefore(buttonRow).slideDown();``), to insert new
+   forms above existing ones, or to use ``addInsert`` (see above) to place
+   the add button outside the formset.
 
 .. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
    Internally, the plugin uses the class names to target the add and delete
