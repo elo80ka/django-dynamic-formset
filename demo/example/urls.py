@@ -1,4 +1,5 @@
-from django.conf.urls.defaults import *
+
+from django.conf.urls import patterns, url, include
 from example.forms import AutoCompleteOrderedItemForm, OrderedItemForm, ContactFormset, MaxFiveContactsFormset, EmptyContactFormset, EventFormset
 from example.forms import AutoCompleteSelectFieldForm
 

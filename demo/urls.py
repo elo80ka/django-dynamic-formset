@@ -1,22 +1,20 @@
 import django
 from django.conf import settings
-from django.conf.urls.defaults import *
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
+from django.views.generic import TemplateView
+from django.conf.urls import patterns, url, include
 
-major, minor = django.VERSION[:2]
-is_pre12 = (major <= 1 and minor < 2)
 
 urlpatterns = patterns('',
-    (r'^$', direct_to_template, {'template': 'index.html', 'extra_context': dict(is_pre12=is_pre12)}),
-    (r'^examples/', include('example.urls')),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^examples/', include('example.urls')),
 )
 
 try:
     import ajax_select
     # If django-ajax-selects is installed, include its URLs:
     urlpatterns += patterns('',
-        (r'^ajax-select/', include('ajax_select.urls'))
+        url(r'^ajax-select/', include('ajax_select.urls'))
     )
 except ImportError:
     pass
