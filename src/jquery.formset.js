@@ -176,8 +176,14 @@
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this);
                 applyExtraClasses(row, formCount);
                 row.insertBefore(buttonRow).show();
-                row.find(childElementSelector).each(function() {
-                    updateElementIndex($(this), options.prefix, formCount);
+                row.find(childElementSelector).not(options.keepFieldValues).each(function() {
+                    var elem = $(this);
+                    updateElementIndex(elem, options.prefix, formCount);
+                    if (elem.is('input:checkbox') || elem.is('input:radio')) {
+                        elem.attr('checked', false);
+                    } else {
+                        elem.val('');
+                    }
                 });
                 totalForms.val(formCount + 1);
                 // Check if we've exceeded the maximum allowed number of forms:
