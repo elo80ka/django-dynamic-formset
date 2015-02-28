@@ -132,7 +132,7 @@
                 template = (options.formTemplate instanceof $) ? options.formTemplate : $(options.formTemplate);
                 template.removeAttr('id').addClass(options.formCssClass + ' formset-custom-template');
                 template.find(childElementSelector).each(function() {
-                    updateElementIndex($(this), options.prefix, '__prefix__');
+                    updateElementIndex($(this), options.prefix, 0);
                 });
                 insertDeleteLink(template);
             } else {
