@@ -46,7 +46,10 @@
             insertDeleteLink = function(row) {
                 var delCssSelector = options.deleteCssClass.trim().replace(/\s+/g, '.'),
                     addCssSelector = options.addCssClass.trim().replace(/\s+/g, '.');
-                if (row.is('TR')) {
+                if (row.find(options.deleteContainerSelector).length) {
+                    // If the new row has a delete link container, insert the delete link into that
+                    row.find(options.deleteContainerSelector).append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
+                } else if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
                     row.children(':last').append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
@@ -193,16 +196,17 @@
 
     /* Setup plugin defaults */
     $.fn.formset.defaults = {
-        prefix: 'form',                  // The form prefix for your django formset
-        formTemplate: null,              // The jQuery selection cloned to generate new form instances
-        addText: 'add another',          // Text for the add link
-        deleteText: 'remove',            // Text for the delete link
-        addCssClass: 'add-row',          // CSS class applied to the add link
-        deleteCssClass: 'delete-row',    // CSS class applied to the delete link
-        formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
-        extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
-        keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
-        added: null,                     // Function called each time a new form is added
-        removed: null                    // Function called each time a form is deleted
+        prefix: 'form',                                 // The form prefix for your django formset
+        formTemplate: null,                             // The jQuery selection cloned to generate new form instances
+        addText: 'add another',                         // Text for the add link
+        deleteText: 'remove',                           // Text for the delete link
+        addCssClass: 'add-row',                         // CSS class applied to the add link
+        deleteCssClass: 'delete-row',                   // CSS class applied to the delete link
+        deleteContainerSelector: '.delete-container',   // jQuery selector for delete link container in template form
+        formCssClass: 'dynamic-form',                   // CSS class applied to each form in a formset
+        extraClasses: [],                               // Additional CSS classes, which will be applied to each form in turn
+        keepFieldValues: '',                            // jQuery selector for fields whose values should be kept when the form is cloned
+        added: null,                                    // Function called each time a new form is added
+        removed: null                                   // Function called each time a form is deleted
     };
 })(jQuery);
