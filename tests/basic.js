@@ -66,7 +66,7 @@
         var $totalForms = $('#id_form-TOTAL_FORMS'),
             $minForms = $('#id_form-MIN_NUM_FORMS'),
             curCount = parseInt($totalForms.val(), 10),
-            minCount = parseInt($minForms.val(), 1),
+            minCount = parseInt($minForms.val(), 10),
             $add = $('#stacked-form .add-row'),
             $del = $('#stacked-form .delete-row'),
             i;
