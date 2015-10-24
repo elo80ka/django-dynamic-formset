@@ -73,10 +73,10 @@
         assert.equal(curCount, minCount, 'Form count is equal to minimum allowed.');
         assert.ok($del.first().is(':hidden'), 'Delete button is hidden.');
         $add.trigger('click');
-        assert.ok(curCount > minCount, 'Form count is greater than minimum allowed.');
+        assert.ok(parseInt($totalForms.val(), 10) > parseInt($minForms.val(), 10), 'Form count is greater than minimum allowed.');
         assert.ok($del.is(':hidden') === 0, 'Delete buttons are now all visible.');
         $del.first().trigger('click');
-        assert.equal(parseInt($totalForms.val(), 10), minCount, 'Form count is now equal to min allowed.');
+        assert.equal($totalForms.val(), $minForms.val(), 'Form count is now equal to min allowed.');
         assert.ok($del.first().is(':hidden'), 'Delete button is hidden again.');
     });
 
