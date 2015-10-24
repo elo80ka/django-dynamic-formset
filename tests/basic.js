@@ -61,7 +61,25 @@
         assert.ok(parseInt($totalForms.val(), 10) < maxCount, 'Form count is now less than max allowed.');
         assert.ok($add.is(':visible'), 'Add button is visible again.');
     });
-    
+
+    test('Test Min Forms', function(assert){
+        var $totalForms = $('#id_form-TOTAL_FORMS'),
+            $minForms = $('#id_form-MIN_NUM_FORMS'),
+            curCount = parseInt($totalForms.val(), 10),
+            minCount = parseInt($minForms.val(), 1),
+            $add = $('#stacked-form .add-row'),
+            $del = $('#stacked-form .delete-row'),
+            i;
+        assert.equal(curCount, minCount, 'Form count is equal to minimum allowed.');
+        assert.ok($del.first().is(':hidden'), 'Delete button is hidden.');
+        $add.trigger('click');
+        assert.ok(curCount > minCount, 'Form count is greater than minimum allowed.');
+        assert.ok($del.is(':hidden') === 0, 'Delete buttons are now all visible.');
+        $del.first().trigger('click');
+        assert.equal(parseInt($totalForms.val(), 10), minCount, 'Form count is now equal to min allowed.');
+        assert.ok($del.first().is(':hidden'), 'Delete button is hidden again.');
+    });
+
     test('Test Cloned Form Element Name', function (assert) {
         var idRegex = /id_form-(\d+)-(\w+)/,
             nameRegex = /form-(\d+)-(\w+)/;

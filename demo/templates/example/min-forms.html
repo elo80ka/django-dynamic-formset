@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Basic Formset (Table layout){% endblock %}
+
+{% block extrahead %}
+<script type="text/javascript">
+    $(function() {
+        $('#id_contact_info_table tbody tr').formset({
+            extraClasses: ['row1', 'row2', 'row3']
+        })
+    })
+</script>
+<!-- Here's an example of how you can style add/delete buttons with CSS -->
+<style type="text/css">
+    .add-row {
+        padding-left:18px;
+        background:url({{ MEDIA_URL }}images/add.png) no-repeat left center;
+    }
+    .delete-row {
+        float:right;
+        display:block;
+        margin:5px 0 0 5px;
+        text-indent:-6000px;
+        background:url({{ MEDIA_URL }}images/delete.png) no-repeat left center;
+        width:16px;
+        height:16px;
+    }
+    tr.row1 td { background-color: #f9f9f9; }
+    tr.row2 td { background-color: #f3f3f3; }
+    tr.row3 td { background-color: #ededed; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div class="entry">
+        <form method="post" action="">
+            <table id="id_contact_info_table" border="0" cellpadding="0" cellspacing="5">
+                <thead>
+                    <tr>
+                        <th scope="col">Preferred</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form in formset.forms %}
+                    <tr id="{{ form.prefix }}-row">
+                        <td style="text-align:center;">{{ form.preferred }}</td>
+                        <td>{{ form.type }}</td>
+                        <td>{{ form.value }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <p>
+                {{ formset.management_form }}
+                <input type="submit" value="Submit" />
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<p>
+    Django 1.7 added a "MIN_NUM_FORMS" field to the management form; its value maps to the value passed in "min_num"
+    to the formset factory function.
+</p>
+<p>
+    If you're running Django 1.7+, you will be required to have at least 2 forms in this formset.
+</p>
+{% endblock %}
