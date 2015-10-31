@@ -19,6 +19,11 @@
             <li><a href="{% url 'example_form_template' %}">Formset with `extra = 0` (pre Django 1.2)</a></li>
             <li><a href="{% url 'example_empty_form' %}">Formset with `extra = 0` (Django 1.2+)</a></li>
             <li><a href="{% url 'example_max_forms' %}">Limit allowed forms</a></li>
+
+            {% url 'example_min_forms' as url_min_forms%}
+            {%if url_min_forms%}
+                <li><a href="{{url_min_forms}}">Require minimum forms</a></li>
+            {%endif%}
         </ul>
     </div>
 </div>

@@ -61,6 +61,11 @@ ContactFormset = formsets.formset_factory(ContactInfoForm)
 MaxFiveContactsFormset = formsets.formset_factory(ContactInfoForm, extra=5, max_num=5)
 # Define the same formset, with no forms (so we can demo the form template):
 EmptyContactFormset = formsets.formset_factory(ContactInfoForm, extra=0)
+try:
+    # Define the same formset, which will require a minimum of 2 contacts, no extra
+    MinTwoContactsFormset = formsets.formset_factory(ContactInfoForm, extra=0, min_num=2)
+except:
+    pass # django pre 1.7
 
 ###############################################
 ## Plain 'ole Formset with Javascript Widget ##
