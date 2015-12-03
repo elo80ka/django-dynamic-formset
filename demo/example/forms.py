@@ -11,10 +11,12 @@ from example.models import Product, Order, OrderedItem
 class OrderForm(models.ModelForm):
     class Meta:
         model = Order
+        fields = '__all__'
 
 class OrderedItemForm(models.ModelForm):
     class Meta:
         model = OrderedItem
+        fields = '__all__'
 
 class AutoCompleteOrderedItemForm(models.ModelForm):
     """
@@ -24,6 +26,7 @@ class AutoCompleteOrderedItemForm(models.ModelForm):
 
     class Meta:
         model = OrderedItem
+        fields = '__all__'
 
     class Media:
         js = ('js/jquery.autocomplete.min.js', 'js/autocomplete-init.js',)
@@ -85,7 +88,7 @@ class EventForm(forms.Form):
         media = widgets.Media(
             js=('%sjs/core.js' % settings.ADMIN_MEDIA_PREFIX,)
         )
-        media += super(EventForm, self)._get_media()
+        media += super(EventForm, self).media
         return media
     media = property(_get_media)
 
@@ -101,11 +104,12 @@ class AutoCompleteSelectFieldForm(models.ModelForm):
     """
     Use the `AutoCompleteSelectField` to replace the default select field.
     """
-    
+
     product = AutoCompleteSelectField('product')
-    
+
     class Meta:
         model = OrderedItem
+        fields = '__all__'
 
     class Media:
         js = ('js/jquery.autocomplete.min.js',)
