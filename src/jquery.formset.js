@@ -53,8 +53,8 @@
             },
 
             insertDeleteLink = function(row) {
-                var delCssSelector = options.deleteCssClass.trim().replace(/\s+/g, '.'),
-                    addCssSelector = options.addCssClass.trim().replace(/\s+/g, '.');
+                var delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.'),
+                    addCssSelector = $.trim(options.addCssClass).replace(/\s+/g, '.');
                 if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
@@ -192,7 +192,7 @@
                 var formCount = parseInt(totalForms.val()),
                     row = options.formTemplate.clone(true).removeClass('formset-custom-template'),
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this)
-                    delCssSelector = options.deleteCssClass.trim().replace(/\s+/g, '.');
+                    delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.');
                 applyExtraClasses(row, formCount);
                 row.insertBefore(buttonRow).show();
                 row.find(childElementSelector).each(function() {
