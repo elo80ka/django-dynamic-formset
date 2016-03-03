@@ -5,7 +5,7 @@ Installation instructions
 There are two ways to install this application for use by your
 projects; the first is to do a Subversion checkout::
 
-    svn co http://django-dynamic-formset.googlecode.com/svn/trunk/ django-dynamic-formset
+    git clone https://github.com/elo80ka/django-dynamic-formset
 
 The second method is to download a packaged release. The latest
 release is 1.1. You can download the source and documentation only,
