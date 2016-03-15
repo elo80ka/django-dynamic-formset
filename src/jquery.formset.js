@@ -104,7 +104,7 @@
                     }
                     // Check if we've reached the minimum number of forms - hide all delete link(s)
                     if (!showDeleteLinks()){
-                        $('a.' + delCssSelector).each(function(){$(this).hide();});
+                        $('.' + options.formCssClass).find('a.' + delCssSelector).hide();
                     }
                     // Check if we need to show the add button:
                     if (buttonRow.is(':hidden') && showAddButton()) buttonRow.show();
