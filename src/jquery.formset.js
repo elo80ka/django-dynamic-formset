@@ -201,7 +201,7 @@
                 totalForms.val(formCount + 1);
                 // Check if we're above the minimum allowed number of forms -> show all delete link(s)
                 if (showDeleteLinks()){
-                    $('a.' + delCssSelector).each(function(){$(this).show();});
+                    row.find('a.' + delCssSelector).show();
                 }
                 // Check if we've exceeded the maximum allowed number of forms:
                 if (!showAddButton()) buttonRow.hide();
