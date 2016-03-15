@@ -54,20 +54,26 @@
 
             insertDeleteLink = function(row) {
                 var delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.'),
-                    addCssSelector = $.trim(options.addCssClass).replace(/\s+/g, '.');
-                if (row.is('TR')) {
+                    addCssSelector = $.trim(options.addCssClass).replace(/\s+/g, '.'),
+                    deleteLink = '<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>';
+
+                if (options.deleteContainerSelector) {
+                     // If the new row has a delete link container, insert the delete link into that
+                     row.find(options.deleteContainerSelector).append(deleteLink);
+                } else if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
-                    row.children(':last').append('<a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + '</a>');
+                    row.children(':last').append(deleteLink);
                 } else if (row.is('UL') || row.is('OL')) {
                     // If they're laid out as an ordered/unordered list,
                     // insert an <li> after the last list item:
-                    row.append('<li><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a></li>');
+                    row.append('<li>' + deleteLink + '</li>');
                 } else {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:
-                    row.append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>');
+                    row.append(deleteLink);
                 }
+
                 // Check if we're under the minimum number of forms - not to display delete link at rendering
                 if (!showDeleteLinks()){
                     row.find('a.' + delCssSelector).hide();
@@ -222,6 +228,7 @@
         deleteText: 'remove',            // Text for the delete link
         addCssClass: 'add-row',          // CSS class applied to the add link
         deleteCssClass: 'delete-row',    // CSS class applied to the delete link
+        deleteContainerSelector: null,   // jQuery selector for delete link container in template form
         formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
         keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
