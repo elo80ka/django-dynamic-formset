@@ -11,10 +11,12 @@ from example.models import Product, Order, OrderedItem
 class OrderForm(models.ModelForm):
     class Meta:
         model = Order
+        fields = '__all__'
 
 class OrderedItemForm(models.ModelForm):
     class Meta:
         model = OrderedItem
+        fields = '__all__'
 
 class AutoCompleteOrderedItemForm(models.ModelForm):
     """
@@ -24,6 +26,7 @@ class AutoCompleteOrderedItemForm(models.ModelForm):
 
     class Meta:
         model = OrderedItem
+        fields = '__all__'
 
     class Media:
         js = ('js/jquery.autocomplete.min.js', 'js/autocomplete-init.js',)
@@ -61,6 +64,11 @@ ContactFormset = formsets.formset_factory(ContactInfoForm)
 MaxFiveContactsFormset = formsets.formset_factory(ContactInfoForm, extra=5, max_num=5)
 # Define the same formset, with no forms (so we can demo the form template):
 EmptyContactFormset = formsets.formset_factory(ContactInfoForm, extra=0)
+try:
+    # Define the same formset, which will require a minimum of 2 contacts, no extra
+    MinTwoContactsFormset = formsets.formset_factory(ContactInfoForm, extra=0, min_num=2)
+except:
+    pass # django pre 1.7
 
 ###############################################
 ## Plain 'ole Formset with Javascript Widget ##
@@ -80,7 +88,7 @@ class EventForm(forms.Form):
         media = widgets.Media(
             js=('%sjs/core.js' % settings.ADMIN_MEDIA_PREFIX,)
         )
-        media += super(EventForm, self)._get_media()
+        media += super(EventForm, self).media
         return media
     media = property(_get_media)
 
@@ -96,11 +104,12 @@ class AutoCompleteSelectFieldForm(models.ModelForm):
     """
     Use the `AutoCompleteSelectField` to replace the default select field.
     """
-    
+
     product = AutoCompleteSelectField('product')
-    
+
     class Meta:
         model = OrderedItem
+        fields = '__all__'
 
     class Media:
         js = ('js/jquery.autocomplete.min.js',)

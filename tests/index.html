@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="lib/qunit/qunit-1.15.0.css" />
+        <script type="text/javascript" src="lib/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="lib/qunit/qunit-1.15.0.js"></script>
+        <script type="text/javascript" src="lib/qmock.js"></script>
+        <script type="text/javascript" src="../build/jquery.formset.min.js"></script>
+        <script type="text/javascript" src="basic.js"></script>
+        <script type="text/javascript">
+        <!--
+            QMock.config.failslow = false;
+            QMock.config.compare = QUnit.equiv;
+        //-->
+        </script>
+    </head>
+    <body>
+        <h1 id="qunit-header">Dynamic Formset Tests</h1>
+        <h2 id="qunit-banner"></h2>
+        <div id="qunit-testrunner-toolbar"></div>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+        <div id="qunit-fixture">
+            <form id="stacked-form">
+                <input type="hidden" name="form-TOTAL_FORMS" value="1" id="id_form-TOTAL_FORMS" />
+                <input type="hidden" name="form-INITIAL_FORMS" value="0" id="id_form-INITIAL_FORMS" />
+                <input type="hidden" name="form-MIN_NUM_FORMS" value="0" id="id_form-MIN_NUM_FORMS" />
+                <input type="hidden" name="form-MAX_NUM_FORMS" value="3" id="id_form-MAX_NUM_FORMS" />
+                <div>
+                    <label for="id_form-0-type">Type:</label>
+                    <select name="form-0-type" id="id_form-0-type">
+                        <option value="Phone">Phone</option>
+                        <option value="Fax">Fax</option>
+                        <option value="Email" selected="selected">Email</option>
+                        <option value="AIM">AIM</option>
+                        <option value="Gtalk">Gtalk/Jabber</option>
+                        <option value="Yahoo">Yahoo</option>
+                    </select>
+                    <label for="id_form-0-value">Value:</label>
+                    <input id="id_form-0-value" type="text" name="form-0-value" maxlength="200" value="me@example.com" />
+                    <label for="id_form-0-preferred">
+                        <input type="checkbox" name="form-0-preferred" id="id_form-0-preferred" checked="checked" /> Preferred
+                    </label>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>

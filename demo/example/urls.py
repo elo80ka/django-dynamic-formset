@@ -1,4 +1,5 @@
-from django.conf.urls.defaults import *
+
+from django.conf.urls import patterns, url, include
 from example.forms import AutoCompleteOrderedItemForm, OrderedItemForm, ContactFormset, MaxFiveContactsFormset, EmptyContactFormset, EventFormset
 from example.forms import AutoCompleteSelectFieldForm
 
@@ -24,4 +25,11 @@ if major >= 1 and minor >= 2:
     urlpatterns += patterns('example.views',
         url(r'^max-forms/$', 'formset', {'formset_class': MaxFiveContactsFormset, 'template': 'example/max-forms.html'}, name='example_max_forms'),
         url(r'^empty-form/$', 'formset', {'formset_class': EmptyContactFormset, 'template': 'example/empty-form.html'}, name='example_empty_form'),
+    )
+
+if major >=1 and minor >= 7:
+    from example.forms import MinTwoContactsFormset
+    # These examples require Django 1.7 and above:
+    urlpatterns += patterns('example.views',
+        url(r'^min-forms/$', 'formset', {'formset_class': MinTwoContactsFormset, 'template': 'example/min-forms.html'}, name='example_min_forms'),
     )

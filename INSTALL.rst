@@ -5,7 +5,7 @@ Installation instructions
 There are two ways to install this application for use by your
 projects; the first is to do a Subversion checkout::
 
-    svn co http://django-dynamic-formset.googlecode.com/svn/trunk/ django-dynamic-formset
+    git clone https://github.com/elo80ka/django-dynamic-formset
 
 The second method is to download a packaged release. The latest
 release is 1.1. You can download the source and documentation only,
@@ -26,18 +26,18 @@ The demo project is a Django project, showing different ways to
 use the plugin. To run the project, you'll need Python_ and Django_.
 For instructions on installing them, see their respective sites.
 
-You'll also need PySQLite_ - if you've got Python 2.5 and above, this
-is already included in the standard library.
-
-Once you've set up Django, run the following commands to set up the
-database and start the development server::
+Once you've got the source code, run the following commands to set up the
+SQLite3 database and start the development server::
 
     cd demo
-    python ./manage.py syncdb
-    python ./manage.py runserver
+    virtualenv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    chmod a+x manage.py
+    ./manage.py syncdb
+    ./manage.py runserver
 
 You can now browse to ``http://localhost:8000/`` and view the examples.
 
 .. _Python: http://python.org/
 .. _Django: http://www.djangoproject.com/
-.. _PySQLite: http://oss.itsystementwicklung.de/trac/pysqlite
