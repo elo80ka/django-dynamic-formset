@@ -88,7 +88,7 @@
                     } else {
                         row.slideUp(400, function(){row.remove();});
                         // Update the TOTAL_FORMS count:
-                        forms = $('.' + options.formCssClass).not('.formset-custom-template');
+                        forms = $('.' + options.formCssClass).not('.formset-custom-template').not(row);
                         totalForms.val(forms.length);
                     }
                     for (var i=0, formCount=forms.length; i<formCount; i++) {
