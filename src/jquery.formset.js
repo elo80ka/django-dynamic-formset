@@ -83,10 +83,10 @@
                         // Rather than remove this form from the DOM, we'll mark it as deleted
                         // and hide it, then let Django handle the deleting:
                         del.val('on');
-                        row.hide();
+                        row.slideUp();
                         forms = $('.' + options.formCssClass).not(':hidden');
                     } else {
-                        row.remove();
+                        row.slideUp(400, function(){row.remove();});
                         // Update the TOTAL_FORMS count:
                         forms = $('.' + options.formCssClass).not('.formset-custom-template');
                         totalForms.val(forms.length);
@@ -194,7 +194,8 @@
                     buttonRow = $($(this).parents('tr.' + options.formCssClass + '-add').get(0) || this)
                     delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.');
                 applyExtraClasses(row, formCount);
-                row.insertBefore(buttonRow).show();
+                row.hide();
+                row.insertBefore(buttonRow).slideDown();
                 row.find(childElementSelector).each(function() {
                     updateElementIndex($(this), options.prefix, formCount);
                 });
