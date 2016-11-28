@@ -41,7 +41,11 @@
         assert.equal($('#id_form-TOTAL_FORMS').val(), '1', 'Default form is present.');
         $('#stacked-form .delete-row').trigger('click');
         assert.equal($('#id_form-TOTAL_FORMS').val(), '0', 'Updated "Total Forms" count.');
-        assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
+        stop(); 
+        setTimeout(function(){
+            assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
+            start()
+        }, 600);
     });
     
     test('Test Max Forms', function (assert) {
@@ -176,7 +180,13 @@
         assert.ok($btn.hasClass('btn-danger'), 'Remove button has class "btn-danger" applied to it.');
         $btn.trigger('click');
         assert.equal($('#id_form-TOTAL_FORMS').val(), '0', 'Updated "Total Forms" count.');
-        assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
+
+        stop(); 
+        setTimeout(function(){
+            assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
+            start()
+        }, 600);
+
     });
 
 
