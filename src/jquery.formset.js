@@ -165,6 +165,8 @@
                     // This fixes Issue 1, reported by Wilson.Andrew.J:
                     if (elem.is('input:checkbox') || elem.is('input:radio')) {
                         elem.attr('checked', false);
+                    } else if (elem.is('select')){
+                        elem.find("option").removeAttr("selected");
                     } else {
                         elem.val('');
                     }
