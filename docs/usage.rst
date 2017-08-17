@@ -302,6 +302,14 @@ complete list of available options is shown below::
         This means you can also pass in DOM elements, or a function (in newer
         versions of jQuery) as your selector.
 
+    ``addImage``
+        Use the specified image instead of text for the add button. This should
+        be a URL that will be automatically wrapped in an <img> tag.
+
+    ``deleteImage``
+        Use the specified image instead of text for the delete button. This should
+        be a URL that will be automatically wrapped in an <img> tag.
+
 .. note:: The ``addCssClass`` and ``deleteCssClass`` options must be unique.
    Internally, the plugin uses the class names to target the add and delete
    links. Any other elements with the same class applied to them will also

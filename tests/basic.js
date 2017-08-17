@@ -13,6 +13,8 @@
         assert.equal($.fn.formset.defaults.keepFieldValues, '', 'keepFieldValues: ');
         assert.equal($.fn.formset.defaults.added, null, 'added callback: null');
         assert.equal($.fn.formset.defaults.removed, null, 'removed callback: null');
+        assert.equal($.fn.formset.defaults.addImage, null, 'addImage: null');
+        assert.equal($.fn.formset.defaults.deleteImage, null, 'deleteImage: null');
     });
     
     module('Basic Formset Tests', {
@@ -26,7 +28,9 @@
     test('Test Formset Creation', function (assert) {
         assert.equal($('#stacked-form div').size(), 1, 'Default form is present.');
         assert.equal($('#stacked-form .delete-row').size(), 1, 'Delete button created.');
+        assert.equal($('#stacked-form .delete-row').text(), 'remove', 'Delete text created.');
         assert.equal($('#stacked-form .add-row').size(), 1, 'Add button created.');
+        assert.equal($('#stacked-form .add-row').text(), 'add another', 'Add text created.');
         assert.ok($('#stacked-form div:first').hasClass('dynamic-form'), 'FormCssClass added to forms.');
     });
     
@@ -204,5 +208,31 @@
         $del.first().trigger('click');
         assert.equal($totalForms.val(), $minForms.val(), 'Form count is now equal to min allowed.');
         assert.ok($del.first().is(':hidden'), 'Delete button is hidden again.');
+    });
+
+    module('Basic Formset Tests', {
+        setup: function () {
+            $('#stacked-form div').formset({
+                'addImage': 'add.png',
+                'deleteImage': 'delete.png'
+            });
+        }
+    });
+    
+    test('Test Formset Creation with Images', function (assert) {
+        assert.equal($('#stacked-form div').size(), 1, 'Default form is present.');
+        assert.equal($('#stacked-form .delete-row').size(), 1, 'Delete button created.');
+        assert.equal(
+            $('#stacked-form .delete-row').html(),
+            "<img src=\"delete.png\">",
+            'Delete image created.'
+        );
+        assert.equal($('#stacked-form .add-row').size(), 1, 'Add button created.');
+        assert.equal(
+            $('#stacked-form .add-row').html(),
+            "<img src=\"add.png\">",
+            'Add image created.'
+        );
+        assert.ok($('#stacked-form div:first').hasClass('dynamic-form'), 'FormCssClass added to forms.');
     });
 }(jQuery));
