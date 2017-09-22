@@ -35,6 +35,16 @@
                 if (elem.attr('name')) elem.attr('name', elem.attr('name').replace(idRegex, replacement));
             },
 
+
+            // add the basic name of the input as a data-basic-name for easy lookup
+            addInputNameData = function (elem, prefix, ndx) {
+                var idRegex = new RegExp(prefix + '-(\\d+|__prefix__)-'),
+                    replacement = prefix + '-' + ndx + '-';
+                if (elem.attr('name')) {
+                    elem.attr('data-basic-name', elem.attr('name').replace(idRegex, ''));
+                }
+            },
+
             hasChildElements = function(row) {
                 return row.find(childElementSelector).length > 0;
             },
@@ -136,6 +146,9 @@
             if (hasChildElements(row)) {
                 row.addClass(options.formCssClass);
                 if (row.is(':visible')) {
+                    row.find(childElementSelector).each(function () {
+                        addInputNameData($(this), options.prefix, i);
+                    });
                     insertDeleteLink(row);
                     applyExtraClasses(row, i);
                 }
@@ -207,10 +220,25 @@
                 if (!showAddButton()) buttonRow.hide();
                 // If a post-add callback was supplied, call it with the added form:
                 if (options.added) options.added(row);
+                // store this for easy access in the $$.addRow function
+                options.lastRowAdded = row;
                 return false;
             });
         }
 
+        // Expose a function to add a new row with custom data
+        // custom data is a dictionary with key = basic name of the input field and value is the initial value.
+        //see: addInputNameData
+        $$.addRow = function (data, callback) {
+            addButton.click();
+            var newRow = options.lastRowAdded;
+            if(data) {
+                for (var key in data) {
+                    newRow.find("[data-basic-name=" + key + "]").val(data[key])
+                }
+            }
+            if(callback) callback(newRow);
+        };
         return $$;
     };
 
