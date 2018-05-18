@@ -1,5 +1,5 @@
 /**
- * jQuery Formset 1.3-pre
+ * jQuery Formset 1.4-pre
  * @author Stanislaus Madueke (stan DOT madueke AT gmail DOT com)
  * @requires jQuery 1.2.6 or later
  *
@@ -64,9 +64,16 @@
                     // insert an <li> after the last list item:
                     row.append('<li><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a></li>');
                 } else {
-                    // Otherwise, just insert the remove button as the
-                    // last child element of the form's container:
-                    row.append('<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>');
+                    var delButtonHTML = '<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>';
+                    if (options.deleteContainerClass) {
+                        // If we have a specific container for the remove button,
+                        // place it as the last child of that container:
+                        row.find('[class*="' + options.deleteContainerClass + '"]').append(delButtonHTML);
+                    } else {
+                        // Otherwise, just insert the remove button as the
+                        // last child element of the form's container:
+                        row.append(delButtonHTML);
+                    }
                 }
                 // Check if we're under the minimum number of forms - not to display delete link at rendering
                 if (!showDeleteLinks()){
@@ -183,9 +190,19 @@
                 if (hideAddButton) buttonRow.hide();
                 addButton = buttonRow.find('a');
             } else {
-                // Otherwise, insert it immediately after the last form:
-                $$.filter(':last').after('<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>');
-                addButton = $$.filter(':last').next();
+                var addButtonHTML = '<a class="' + options.addCssClass + '" href="javascript:void(0)">' + options.addText + '</a>';
+
+                if (options.addContainerClass) {
+                    // If we have a specific container for the "add" button,
+                    // place it as the last child of that container:
+                    var addContainer = $('[class*="' + options.addContainerClass + '"');
+                    addContainer.append(addButtonHTML);
+                    addButton = addContainer.find('[class="' + options.addCssClass + '"]');
+                } else {
+                    // Otherwise, insert it immediately after the last form:
+                    $$.filter(':last').after(addButtonHTML);
+                    addButton = $$.filter(':last').next();
+                }
                 if (hideAddButton) addButton.hide();
             }
             addButton.click(function() {
@@ -220,6 +237,8 @@
         formTemplate: null,              // The jQuery selection cloned to generate new form instances
         addText: 'add another',          // Text for the add link
         deleteText: 'remove',            // Text for the delete link
+        addContainerClass: null,         // Container CSS class for the add link
+        deleteContainerClass: null,      // Container CSS class for the delete link
         addCssClass: 'add-row',          // CSS class applied to the add link
         deleteCssClass: 'delete-row',    // CSS class applied to the delete link
         formCssClass: 'dynamic-form',    // CSS class applied to each form in a formset
