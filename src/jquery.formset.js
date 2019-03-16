@@ -211,6 +211,33 @@
             });
         }
 
+        // adding multiple rows bindings
+        if (options.addMultRows) {
+            var addMultRowsButton = options.addMultRows.button;
+            var addMultRowsFunction = options.addMultRows.function;
+            var data = addMultRowsFunction();
+            var currentDataRow = undefined;
+
+            // we got the data & insert a row for every element on it
+            addMultRowsButton.click(function () {
+                data.forEach(function (elem) {
+                    currentDataRow = elem;
+                    addButton.click();
+                });
+            });
+
+            // add row_data to the row to allow customize row values
+            // decorating 'added' callback
+            var previousAdded = options.added;
+            options.added = function (row) {
+                row.attr('data', currentDataRow);
+                if (previousAdded) {
+                    // in 'added' callback you can use the data in the row
+                    previousAdded(row);
+                }
+            };
+        }
+
         return $$;
     };
 
@@ -226,6 +253,8 @@
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
         keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
         added: null,                     // Function called each time a new form is added
-        removed: null                    // Function called each time a form is deleted
+        removed: null,                   // Function called each time a form is deleted
+        addMultRows: null                // Button for add multiple rows programatically and function for assigns data to it
+        // For example addMultRows: {'button': $('#mybutton'), 'function': function() {return [1, 2, 3]}}
     };
 })(jQuery);
