@@ -223,6 +223,7 @@
                 data.forEach(function (elem) {
                     currentDataRow = elem;
                     addButton.click();
+                    currentDataRow = undefined;
                 });
             });
 
@@ -230,7 +231,9 @@
             // decorating 'added' callback
             var previousAdded = options.added;
             options.added = function (row) {
-                row.attr('data', currentDataRow);
+                if (currentDataRow) {
+                    row.attr('data', currentDataRow);
+                }
                 if (previousAdded) {
                     // in 'added' callback you can use the data in the row
                     previousAdded(row);
