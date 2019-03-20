@@ -215,15 +215,18 @@
         if (options.addMultRows) {
             var addMultRowsButton = options.addMultRows.button;
             var addMultRowsFunction = options.addMultRows.function;
-            var data = addMultRowsFunction();
             var currentDataRow = undefined;
 
             // we got the data & insert a row for every element on it
             addMultRowsButton.click(function () {
-                data.forEach(function (elem) {
-                    currentDataRow = elem;
-                    addButton.click();
-                    currentDataRow = undefined;
+                var url = addMultRowsFunction();
+                // obtenemos los datos de los agentes asignados al grupo
+                $.get(url).done(function(data) {
+                    data.forEach(function (elem) {
+                        currentDataRow = elem;
+                        addButton.click();
+                        currentDataRow = undefined;
+                    });
                 });
             });
 
@@ -232,7 +235,7 @@
             var previousAdded = options.added;
             options.added = function (row) {
                 if (currentDataRow) {
-                    row.attr('data', currentDataRow);
+                    row.attr('data', JSON.stringify(currentDataRow));
                 }
                 if (previousAdded) {
                     // in 'added' callback you can use the data in the row
@@ -258,6 +261,10 @@
         added: null,                     // Function called each time a new form is added
         removed: null,                   // Function called each time a form is deleted
         addMultRows: null                // Button for add multiple rows programatically and function for assigns data to it
-        // For example addMultRows: {'button': $('#mybutton'), 'function': function() {return [1, 2, 3]}}
+        // The function should return an url that can be accesed using GET, and then it use the generated data to add
+        // to each row. Note that the url returned by the function can be fixed or not, in order to add more flexibility
+        // obtaining data sources.
+        // The data returned by the API should be a list of JS objects
+        // For example addMultRows: {'button': $('#mybutton'), 'function': function() {return 'https://restcountries.eu/rest/v2/all'}}
     };
 })(jQuery);
