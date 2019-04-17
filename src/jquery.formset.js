@@ -9,6 +9,10 @@
  * Licensed under the New BSD License
  * See: http://www.opensource.org/licenses/bsd-license.php
  */
+
+// This is a fork of original repo, adding the ability to add many rows with a single click, fetch with
+// git clone --single-branch --branch add-multiple-rows-with-data https://github.com/alejandrozf/django-dynamic-formset/
+
 ;(function($) {
     $.fn.formset = function(opts)
     {
@@ -215,18 +219,22 @@
         if (options.addMultRows) {
             var addMultRowsButton = options.addMultRows.button;
             var addMultRowsFunction = options.addMultRows.function;
+            var addMultRowsPostFunction = options.addMultRows.post_function;
             var currentDataRow = undefined;
 
             // we got the data & insert a row for every element on it
             addMultRowsButton.click(function () {
                 var url = addMultRowsFunction();
-                // obtenemos los datos de los agentes asignados al grupo
+                // we got the data of the group agentes
                 $.get(url).done(function(data) {
                     data.forEach(function (elem) {
                         currentDataRow = elem;
                         addButton.click();
                         currentDataRow = undefined;
                     });
+                    if (addMultRowsPostFunction) {
+                        addMultRowsPostFunction(data);
+                    }
                 });
             });
 
@@ -264,7 +272,8 @@
         // The function should return an url that can be accesed using GET, and then it use the generated data to add
         // to each row. Note that the url returned by the function can be fixed or not, in order to add more flexibility
         // obtaining data sources.
-        // The data returned by the API should be a list of JS objects
-        // For example addMultRows: {'button': $('#mybutton'), 'function': function() {return 'https://restcountries.eu/rest/v2/all'}}
+        // The data returned by the API should be a list of JS objects and also can be passed to another callback option called
+        // 'post_function' that would be call when data sources has been obtained and new data rows were created.
+        // For example addMultRows: {'button': $('#mybutton'), 'function': function() {return 'https://restcountries.eu/rest/v2/all'}, 'post_function': function(data) {console.log(data);}}
     };
 })(jQuery);
