@@ -10,9 +10,6 @@
  * See: http://www.opensource.org/licenses/bsd-license.php
  */
 
-// This is a fork of original repo, adding the ability to add many rows with a single click, fetch with
-// git clone --single-branch --branch add-multiple-rows-with-data https://github.com/alejandrozf/django-dynamic-formset/
-
 ;(function($) {
     $.fn.formset = function(opts)
     {
