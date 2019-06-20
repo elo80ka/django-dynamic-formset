@@ -3,7 +3,7 @@ Installation instructions
 =========================
 
 There are two ways to install this application for use by your
-projects; the first is to do a Subversion checkout::
+projects; the first is to do a git checkout::
 
     git clone https://github.com/elo80ka/django-dynamic-formset
 
