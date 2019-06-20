@@ -173,7 +173,11 @@
             // FIXME: Perhaps using $.data would be a better idea?
             options.formTemplate = template;
 
-            if ($$.is('TR')) {
+            if (options.addButton) {
+                // if custom button passed to options
+                addButton = options.addButton;
+                if (hideAddButton) addButton.hide();
+            } else if ($$.is('TR')) {
                 // If forms are laid out as table rows, insert the
                 // "add" button in a new table row:
                 var numCols = $$.eq(0).children().length,   // This is a bit of an assumption :|
@@ -218,6 +222,7 @@
     $.fn.formset.defaults = {
         prefix: 'form',                  // The form prefix for your django formset
         formTemplate: null,              // The jQuery selection cloned to generate new form instances
+        addButton: null,                 // Custom "Add" button
         addText: 'add another',          // Text for the add link
         deleteText: 'remove',            // Text for the delete link
         addCssClass: 'add-row',          // CSS class applied to the add link
