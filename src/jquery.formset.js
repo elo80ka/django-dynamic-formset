@@ -163,6 +163,7 @@
             } else {
                 // Otherwise, use the last form in the formset; this works much better if you've got
                 // extra (>= 1) forms (thnaks to justhamade for pointing this out):
+                if (options.hideLastAddForm) $('.' + options.formCssClass + ':last').hide();
                 template = $('.' + options.formCssClass + ':last').clone(true).removeAttr('id');
                 template.find('input:hidden[id $= "-DELETE"]').remove();
                 // Clear all cloned fields, except those the user wants to keep (thanks to brunogola for the suggestion):
@@ -242,6 +243,7 @@
         extraClasses: [],                // Additional CSS classes, which will be applied to each form in turn
         keepFieldValues: '',             // jQuery selector for fields whose values should be kept when the form is cloned
         added: null,                     // Function called each time a new form is added
-        removed: null                    // Function called each time a form is deleted
+        removed: null,                   // Function called each time a form is deleted
+        hideLastAddForm: false           // When set to true, hide last empty add form (becomes visible when clicking on add button)
     };
 })(jQuery);
