@@ -315,6 +315,13 @@ complete list of available options is shown below::
         which a particular row's delete link is appended to. The container
         will be searched for within the particular row itself.
 
+.. versionadded:: 1.5
+
+    ``hideLastAddForm``
+        Set this to ``true`` to hide the last empty add form (displayed when
+        in Django ``extra`` parameter is greater than 0). The form becomes
+        visible when clicking the "add new" link.
+
 .. note:: The ``addCssClass``, ``addContainerClass`, ``deleteCssClass`` and
    ``deleteContainerClass`` options must be unique. Internally, the plugin
    uses the class names to target and place the add and delete links. Any other
