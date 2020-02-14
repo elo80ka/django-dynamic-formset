@@ -56,11 +56,11 @@
                 var delCssSelector = $.trim(options.deleteCssClass).replace(/\s+/g, '.'),
                     addCssSelector = $.trim(options.addCssClass).replace(/\s+/g, '.');
 
-                var delButtonHTML = '<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>';
+                var deleteButtonHTML = '<a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText +'</a>';
                 if (options.deleteContainerClass) {
                     // If we have a specific container for the remove button,
                     // place it as the last child of that container:
-                    row.find('[class*="' + options.deleteContainerClass + '"]').append(delButtonHTML);
+                    row.find('[class*="' + options.deleteContainerClass + '"]').append(deleteButtonHTML);
                 } else if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
@@ -72,7 +72,7 @@
                 } else {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:
-                    row.append(delButtonHTML);
+                    row.append(deleteButtonHTML);
                 }
 
                 // Check if we're under the minimum number of forms - not to display delete link at rendering
