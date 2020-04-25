@@ -64,11 +64,11 @@
                 } else if (row.is('TR')) {
                     // If the forms are laid out in table rows, insert
                     // the remove button into the last table cell:
-                    row.children(':last').append(deleteButtonHTML);
+                    row.children(':last').append(delButtonHTML);
                 } else if (row.is('UL') || row.is('OL')) {
                     // If they're laid out as an ordered/unordered list,
                     // insert an <li> after the last list item:
-                    row.append('<li>' + deleteButtonHTML + '</li>');
+                    row.append('<li>' + delButtonHTML + '</li>');
                 } else {
                     // Otherwise, just insert the remove button as the
                     // last child element of the form's container:
