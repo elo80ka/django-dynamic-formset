@@ -92,6 +92,7 @@
                         del.val('on');
                         row.hide();
                         forms = $('.' + options.formCssClass).not(':hidden');
+                        totalForms.val(forms.length);
                     } else {
                         row.remove();
                         // Update the TOTAL_FORMS count:
