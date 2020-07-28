@@ -22,14 +22,16 @@ formsets using any of the provided methods: both regular formsets
    to reference the jQuery library, before including the script.
 
 3. Render the formset as you would normally -- I usually use a table
-   but you can use DIVs, Ps or whatever you desire. Let's use the
-   example markup below::
+   but you can use DIVs, Ps or whatever you desire. Remember to include the 
+   ``form.id`` so you avoid raising the ``MultiValueDictKeyError``.
+   Let's use the example markup below::
 
        <form id="myForm" method="post" action="">
            <table border="0" cellpadding="0" cellspacing="0">
                <tbody>
                    {% for form in formset.forms %}
                    <tr>
+                      {{ form.id }}
                       <td>{{ form.field1 }}</td>
                       <td>{{ form.field2 }}</td>
                       <td>{{ form.field3 }}</td>
@@ -337,3 +339,4 @@ Provided CSS classes
 Each form's container will have the class specified by the ``formCssClass``
 option (defaults to "dynamic-form") applied to it. You can use this to define
 style rules targeting each of these forms.
+ 
