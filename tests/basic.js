@@ -1,7 +1,13 @@
-(function($) {
-    module('Basic Formset Tests');
+const { module, test } = QUnit;
 
-    test('Test Default Options', function (assert) {
+(function($) {
+    function toNumber (value) {
+        return parseInt(value, 10);
+    }
+
+    module('Formset Defaults');
+
+    test('Options', function (assert) {
         assert.equal($.fn.formset.defaults.prefix, 'form', 'prefix: form');
         assert.equal($.fn.formset.defaults.formTemplate, null, 'formTemplate: null');
         assert.equal($.fn.formset.defaults.addText, 'add another', 'addText: "add another"');
@@ -15,15 +21,15 @@
         assert.equal($.fn.formset.defaults.removed, null, 'removed callback: null');
     });
     
-    module('Basic Formset Tests', {
-        setup: function () {
+    module('Basic Formset', {
+        beforeEach: function () {
             $('#stacked-form div').formset({
                 extraClasses: ['row1', 'row2', 'row3']
             });
         }
     });
-    
-    test('Test Formset Creation', function (assert) {
+
+    test('Test Creation', function (assert) {
         assert.equal($('#stacked-form div').size(), 1, 'Default form is present.');
         assert.equal($('#stacked-form .delete-row').size(), 1, 'Delete button created.');
         assert.equal($('#stacked-form .add-row').size(), 1, 'Add button created.');
@@ -47,8 +53,8 @@
     test('Test Max Forms', function (assert) {
         var $totalForms = $('#id_form-TOTAL_FORMS'),
             $maxForms = $('#id_form-MAX_NUM_FORMS'),
-            curCount = parseInt($totalForms.val(), 10),
-            maxCount = parseInt($maxForms.val(), 10),
+            curCount = toNumber($totalForms.val()),
+            maxCount = toNumber($maxForms.val()),
             $add = $('#stacked-form .add-row'), i;
         assert.ok(curCount < maxCount, 'Form count is less than maximum allowed.');
         assert.ok($add.is(':visible'), 'Add button is visible.');
@@ -58,7 +64,7 @@
         assert.equal($totalForms.val(), $maxForms.val(), 'Maximum number of forms added.');
         assert.ok($add.is(':hidden'), 'Add button is now hidden.');
         $('#stacked-form .delete-row:first').trigger('click');
-        assert.ok(parseInt($totalForms.val(), 10) < maxCount, 'Form count is now less than max allowed.');
+        assert.ok(toNumber($totalForms.val()) < maxCount, 'Form count is now less than max allowed.');
         assert.ok($add.is(':visible'), 'Add button is visible again.');
     });
 
@@ -110,8 +116,8 @@
     (function () {
         var addCallback, delCallback;
         
-        module('Basic Formset Tests', {
-            setup: function () {
+        module('Basic Formset With Callbacks', {
+            beforeEach: function () {
                 addCallback = new Mock();
                 addCallback.calls(3).required(1);
                 delCallback = new Mock();
@@ -148,10 +154,9 @@
             assert.ok(delCallback.verify(), '"Removed" callback called once, with a single argument.');
         });
     }());
-    
-    
-    module('Basic Formset Tests', {
-        setup: function () {
+
+    module('Basic Formset With Custom CSS', {
+        beforeEach: function () {
             $('#stacked-form div').formset({
                 addCssClass: 'btn btn-add',
                 deleteCssClass: 'btn btn-danger'
@@ -179,9 +184,8 @@
         assert.equal($('#stacked-form div').size(), 0, 'Removed form.');
     });
 
-
-    module('Basic Formset Tests', {
-        setup: function () {
+    module('Basic Formset With Mandatory Form', {
+        beforeEach: function () {
             $('#id_form-MIN_NUM_FORMS').val(1); // set 1 minimum mandatory form
             $('#stacked-form div').formset();
         }
@@ -190,15 +194,15 @@
     test('Test Min Forms', function(assert){
         var $totalForms = $('#id_form-TOTAL_FORMS'),
             $minForms = $('#id_form-MIN_NUM_FORMS'),
-            curCount = parseInt($totalForms.val(), 10),
-            minCount = parseInt($minForms.val(), 10),
+            curCount = toNumber($totalForms.val()),
+            minCount = toNumber($minForms.val()),
             $add = $('#stacked-form .add-row'),
             $del = $('#stacked-form .delete-row'),
             i;
         assert.equal(curCount, minCount, 'Form count is equal to minimum allowed.');
         assert.ok($del.first().is(':hidden'), 'Delete button is hidden.');
         $add.trigger('click');
-        assert.ok(parseInt($totalForms.val(), 10) > parseInt($minForms.val(), 10), 'Form count is greater than minimum allowed.');
+        assert.ok(toNumber($totalForms.val()) > toNumber($minForms.val()), 'Form count is greater than minimum allowed.');
         console.log("test");
         assert.ok($del.is(':hidden').length === undefined, 'Delete buttons are now all visible.');
         $del.first().trigger('click');

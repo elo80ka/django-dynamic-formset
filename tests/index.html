@@ -1,24 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="lib/qunit/qunit-1.15.0.css" />
-        <script type="text/javascript" src="lib/jquery-1.11.0.min.js"></script>
-        <script type="text/javascript" src="lib/qunit/qunit-1.15.0.js"></script>
-        <script type="text/javascript" src="lib/qmock.js"></script>
-        <script type="text/javascript" src="../build/jquery.formset.min.js"></script>
-        <script type="text/javascript" src="basic.js"></script>
-        <script type="text/javascript">
-        <!--
-            QMock.config.failslow = false;
-            QMock.config.compare = QUnit.equiv;
-        //-->
-        </script>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="../node_modules/qunit/qunit/qunit.css" />
     </head>
     <body>
         <h1 id="qunit-header">Dynamic Formset Tests</h1>
         <h2 id="qunit-banner"></h2>
         <div id="qunit-testrunner-toolbar"></div>
-        <h2 id="qunit-userAgent"></h2>
         <ol id="qunit-tests"></ol>
         <div id="qunit-fixture">
             <form id="stacked-form">
@@ -44,5 +33,15 @@
                 </div>
             </form>
         </div>
+        <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="../node_modules/qunit/qunit/qunit.js"></script>
+        <script type="text/javascript" src="lib/qmock.js"></script>
+        <script type="text/javascript" src="../src/jquery.formset.js"></script>
+        <script type="text/javascript" src="basic.js"></script>
+        <script type="text/javascript">
+            QMock.config.failslow = false;
+            QMock.config.compare = QUnit.equiv;
+        </script>
     </body>
 </html>
