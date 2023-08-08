@@ -1,0 +1,24 @@
+name: Run tests and prepare release 🚀
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ $default-branch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18.x
+
+    - name: Build
+      run: |
+        npm install
+        npm run build
