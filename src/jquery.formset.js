@@ -12,8 +12,15 @@
 ;(function($) {
     $.fn.formset = function(opts)
     {
-        var options = $.extend({}, $.fn.formset.defaults, opts),
-            flatExtraClasses = options.extraClasses.join(' '),
+        var options = $.extend({}, $.fn.formset.defaults, opts);
+
+        if (options.prefix === null)
+        {
+            var raw_id = $(this).first().prev().children('input:hidden').first().attr('id');
+            options.prefix = raw_id.substring(3, raw_id.search('-'));
+        }
+
+        var flatExtraClasses = options.extraClasses.join(' '),
             totalForms = $('#id_' + options.prefix + '-TOTAL_FORMS'),
             maxForms = $('#id_' + options.prefix + '-MAX_NUM_FORMS'),
             minForms = $('#id_' + options.prefix + '-MIN_NUM_FORMS'),
@@ -230,7 +237,7 @@
 
     /* Setup plugin defaults */
     $.fn.formset.defaults = {
-        prefix: 'form',                  // The form prefix for your django formset
+        prefix: null,                    // The form prefix for your django formset (null: will detect automatically)
         formTemplate: null,              // The jQuery selection cloned to generate new form instances
         addText: 'add another',          // Text for the add link
         deleteText: 'remove',            // Text for the delete link
