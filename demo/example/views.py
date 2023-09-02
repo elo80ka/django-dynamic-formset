@@ -23,8 +23,7 @@ def formset(request, formset_class, template):
             return display_data(request, data)
     else:
         formset = formset_class()
-    return render_to_response(template, {'formset': formset},
-        context_instance=RequestContext(request))
+    return render_to_response(template, {'formset': formset}, )
 
 def formset_with_template(request, formset_class, template):
     # If you're using a Django version older than 1.2, you won't have `formset.empty_form`;
@@ -41,8 +40,7 @@ def formset_with_template(request, formset_class, template):
         if formset.is_valid():
             data = formset.cleaned_data
             return display_data(request, data)
-    return render_to_response(template, {'form': form, 'formset': formset},
-        context_instance=RequestContext(request))
+    return render_to_response(template, {'form': form, 'formset': formset},)
 
 def inline_formset(request, form_class, template):
     OrderedItemFormset = get_ordereditem_formset(form_class, extra=1, can_delete=True)
@@ -62,8 +60,7 @@ def inline_formset(request, form_class, template):
     else:
         form = OrderForm(instance=order)
         formset = OrderedItemFormset(instance=order)
-    return render_to_response(template, {'form': form, 'formset': formset},
-        context_instance=RequestContext(request))
+    return render_to_response(template, {'form': form, 'formset': formset},)
 
 def multiple_formsets(request, template):
     if request.method == 'POST':
@@ -74,4 +71,4 @@ def multiple_formsets(request, template):
     else:
         contact_formset, event_formset = ContactFormset(prefix='contact_form'), EventFormset(prefix='event_form')
     return render_to_response(template, {'contact_formset': contact_formset, 'event_formset': event_formset},
-        context_instance=RequestContext(request))
+        )
